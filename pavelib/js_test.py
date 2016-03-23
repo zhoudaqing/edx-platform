@@ -2,7 +2,7 @@
 Javascript test tasks
 """
 import sys
-from paver.easy import task, cmdopts, needs
+from paver.easy import task, consume_args, cmdopts, needs
 from pavelib.utils.test.suites import JsTestSuite
 from pavelib.utils.envs import Env
 

@@ -32,6 +32,7 @@ class JsTestSuite(TestSuite):
     def __enter__(self):
         super(JsTestSuite, self).__enter__()
         self.report_dir.makedirs_p()
+        from nose.tools import set_trace; set_trace()
         if not self.skip_clean:
             test_utils.clean_test_files(skip_staticfiles=True)
 

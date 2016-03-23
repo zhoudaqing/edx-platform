@@ -1,7 +1,7 @@
 """
 Helper functions for test tasks
 """
-from paver.easy import sh, task, cmdopts
+from paver.easy import sh, task, cmdopts, consume_args
 from pavelib.utils.envs import Env
 import os
 import subprocess
@@ -13,7 +13,8 @@ __test__ = False  # do not collect
 
 
 @task
-def clean_test_files(skip_staticfiles=False):
+@consume_args
+def clean_test_files(skip_staticfiles=None):
     """
     Clean fixture files used by tests and .pyc files
 
@@ -21,9 +22,10 @@ def clean_test_files(skip_staticfiles=False):
     cleaning the staticfiles directory, which is expensive to create
     but not relevant for all test types.
     """
-    static_files_str = ""
+    static_files_str = "test_root/staticfiles"
     if skip_staticfiles:
-        static_files_str = "test_root/staticfiles"
+        static_files_str = ""
+    from nose.tools import set_trace; set_trace()
     sh("git clean -fqdx test_root/logs test_root/data {static_files_str} test_root/uploads".format(
         static_files_str=static_files_str
     ))
