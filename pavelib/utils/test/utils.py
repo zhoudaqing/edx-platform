@@ -13,11 +13,20 @@ __test__ = False  # do not collect
 
 
 @task
-def clean_test_files():
+def clean_test_files(skip_staticfiles=False):
     """
     Clean fixture files used by tests and .pyc files
+
+    :param skip_staticfiles: To reduce interference across test suites, some suites can skip
+    cleaning the staticfiles directory, which is expensive to create
+    but not relevant for all test types.
     """
-    sh("git clean -fqdx test_root/logs test_root/data test_root/staticfiles test_root/uploads")
+    static_files_str = ""
+    if skip_staticfiles:
+        static_files_str = "test_root/staticfiles"
+    sh("git clean -fqdx test_root/logs test_root/data {static_files_str} test_root/uploads".format(
+        static_files_str=static_files_str
+    ))
     # This find command removes all the *.pyc files that aren't in the .git
     # directory.  See this blog post for more details:
     # http://nedbatchelder.com/blog/201505/be_careful_deleting_files_around_git.html
