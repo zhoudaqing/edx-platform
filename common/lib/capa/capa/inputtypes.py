@@ -311,12 +311,14 @@ class InputTypeBase(object):
         This means that input types that only parse attributes and pass them to the template get everything they need,
         and don't need to override this method.
         """
+        from nose.tools import set_trace; set_trace()
         context = {
             'id': self.input_id,
             'value': self.value,
             'status': Status(self.status, self.capa_system.i18n.ugettext),
             'msg': self.msg,
             'STATIC_URL': self.capa_system.STATIC_URL,
+            'questiontitle': '',
         }
         context.update(
             (a, v) for (a, v) in self.loaded_attributes.iteritems() if a in self.to_render
@@ -342,6 +344,7 @@ class InputTypeBase(object):
             raise NotImplementedError("no rendering template specified for class {0}"
                                       .format(self.__class__))
 
+        from nose.tools import set_trace; set_trace()
         context = self._get_render_context()
 
         html = self.capa_system.render_template(self.template, context)

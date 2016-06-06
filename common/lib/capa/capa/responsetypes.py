@@ -171,6 +171,7 @@ class LoncapaResponse(object):
 
         self.id = xml.get('id')
 
+        from nose.tools import set_trace; set_trace()
         # The LoncapaProblemError messages here do not need to be translated as they are
         # only displayed to the user when settings.DEBUG is True
         for abox in inputfields:
