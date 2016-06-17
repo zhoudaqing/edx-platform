@@ -14,7 +14,7 @@ from opaque_keys import InvalidKeyError
 
 from util.date_utils import get_time_display
 from xmodule.modulestore.django import modulestore
-from course_modes.models import CourseMode, CourseModeExpirationConfig
+from course_modes.models import CourseMode, CourseModeConfig, CourseModeExpirationConfig
 
 # Technically, we shouldn't be doing this, since verify_student is defined
 # in LMS, and course_modes is defined in common.
@@ -216,5 +216,13 @@ class CourseModeExpirationConfigAdmin(admin.ModelAdmin):
     class Meta(object):
         model = CourseModeExpirationConfig
 
+
+class CourseModeConfigAdmin(admin.ModelAdmin):
+    """Admin interface for the course mode auto expiration configuration. """
+
+    class Meta(object):
+        model = CourseModeConfig
+
 admin.site.register(CourseMode, CourseModeAdmin)
 admin.site.register(CourseModeExpirationConfig, CourseModeExpirationConfigAdmin)
+admin.site.register(CourseModeConfig, CourseModeConfigAdmin)
