@@ -81,7 +81,7 @@ define(['jquery', 'coffee/src/instructor_dashboard/student_admin', 'edx-ui-toolk
                 expect(studentadmin.$request_response_error_ee.text()).toEqual(gettext('Please enter a student email address or username.'));
 
                 var success_message = gettext("Started entrance exam rescore task for student '{student_id}'." +
-                    " Click the 'Show Background Task History for Student' button to see the status of the task.");
+                    " Click the 'Show Task Status' button to see the status of the task.");
                 var full_success_message = interpolate_text(success_message, {
                     student_id: unique_student_identifier
                 });
@@ -93,7 +93,8 @@ define(['jquery', 'coffee/src/instructor_dashboard/student_admin', 'edx-ui-toolk
                 studentadmin.$btn_rescore_entrance_exam.click();
                 // Verify that the client contacts the server to start instructor task
                 var params = $.param({
-                    unique_student_identifier: unique_student_identifier
+                    unique_student_identifier: unique_student_identifier,
+                    only_if_higher: false
                 });
                 var url = dashboard_api_url + '/rescore_entrance_exam';
                 AjaxHelpers.expectPostRequest(requests, url, params);
@@ -112,7 +113,8 @@ define(['jquery', 'coffee/src/instructor_dashboard/student_admin', 'edx-ui-toolk
                 studentadmin.$btn_rescore_entrance_exam.click();
                 // Verify that the client contacts the server to start instructor task
                 var params = $.param({
-                    unique_student_identifier: unique_student_identifier
+                    unique_student_identifier: unique_student_identifier,
+                    only_if_higher: false
                 });
                 var url = dashboard_api_url + '/rescore_entrance_exam';
                 AjaxHelpers.expectPostRequest(requests, url, params);
