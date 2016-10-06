@@ -54,12 +54,7 @@ def common_doc_url(request, config_file_object):  # pylint: disable=unused-argum
                               section_name, option)
             return config_file_object.get(section_name, default_option)
 
-        def get_doc_url():
-            """
-            Returns:
-                The URL for the documentation
-            """
-
+        def get_base_doc_url():
             # Read an optional configuration property that sets the base
             # URL of documentation links. By default, DOC_LINK_BASE_URL
             # is null, this test determines whether it is set to a non-null
@@ -71,6 +66,14 @@ def common_doc_url(request, config_file_object):  # pylint: disable=unused-argum
                 doc_base_url = settings.DOC_LINK_BASE_URL
             else:
                 doc_base_url = config_file_object.get("help_settings", "url_base")
+            return doc_base_url
+
+        def get_doc_url():
+            """
+            Returns:
+                The URL for the documentation
+            """
+            doc_base_url = get_base_doc_url()
 
             # Construct and return the URL for the documentation link.
             return "{url_base}/{language}/{version}/{page_path}".format(
@@ -109,6 +112,8 @@ def common_doc_url(request, config_file_object):  # pylint: disable=unused-argum
         return {
             "doc_url": get_doc_url(),
             "pdf_url": get_pdf_url(),
+            "base_doc_url": get_base_doc_url(),
+
         }
 
     return {'get_online_help_info': get_online_help_info}

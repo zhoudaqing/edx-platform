@@ -27,35 +27,12 @@
     }
 }
 
-.help-buttons {
-    padding: ($baseline/2) ($baseline*2.5);
+.help-link-button, #return_to_main_help {
+    cursor: pointer;
+}
 
-    a:link,
-    a:visited {
-        padding: ($baseline*0.75) 0;
-        text-align: center;
-        cursor: pointer;
-        background: $white;
-        text-decoration: none;
-        display: block;
-        border: 1px solid $lms-border-color;
-
-        &#feedback_link_problem {
-            border-bottom-style: none;
-            border-radius: ($baseline/2) ($baseline/2) 0 0;
-        }
-
-        &#feedback_link_question {
-            border-top-style: none;
-            border-radius: 0 0 ($baseline/2) ($baseline/2);
-        }
-
-        &:hover,
-        &:focus {
-            color: $white;
-            background: palette(primary, base);
-        }
-    }
+#return_to_main_help:hover {
+    font-weight: bold;
 }
 
 #feedback_form {

@@ -275,27 +275,12 @@ mark {
     }
 }
 
-.help-buttons {
-    padding: ($baseline/2) ($baseline*2.5);
-    text-align: center;
+.help-link-button, #return_to_main_help {
+    cursor: pointer;
+}
 
-    button {
-        @extend %btn-secondary-blue-outline;
-        margin: .5rem 0;
-        font-weight: initial;
-        text-shadow: none;
-        letter-spacing: initial !important;
-        text-transform: normal !important;
-        vertical-align: initial;
-        
-        &:hover,
-        &:focus {
-            background: $link-color !important;
-            color: $white;
-            box-shadow: none !important;
-            text-shadow: none !important;
-        }
-    }
+#return_to_main_help:hover {
+    text-decoration: underline;
 }
 
 #feedback_form {
