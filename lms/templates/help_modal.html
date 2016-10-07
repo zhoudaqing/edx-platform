@@ -54,7 +54,7 @@ from xmodule.tabs import CourseTabList
     <ul>
         % if discussion_link:
         <li>
-            <a href="${discussion_link}" target="_blank">${_('Ask the Course Discussion Forums')}</a>
+            <a href="${discussion_link}" target="_blank">${_('Ask in the course discussion forums')}</a>
         </li>
         % endif
         <li>
@@ -62,25 +62,38 @@ from xmodule.tabs import CourseTabList
         </li>
         % if settings.FEATURES.get('ENABLE_FEEDBACK_SUBMISSION', False):
         <li>
-            <a role="button" class="help-link-button" id="feedback_link_problem">${_('Report a problem')}</a>
+            <a class="help-link-button" id="feedback_link_problem">${_('Report a problem')}</a>
         </li>
         <li>
-            <a role="button" class="help-link-button" id="feedback_link_suggestion">${_('Make a suggestion')}</a>
+            <a class="help-link-button" id="feedback_link_suggestion">${_('Make a suggestion')}</a>
         </li>
         <li>
-            <a role="button" class="help-link-button" id="feedback_link_question">${_('Ask a question')}</a>
+            <a class="help-link-button" id="feedback_link_question">${_('Ask a question')}</a>
         </li>
         %endif
     </ul>
-
 
     </div>
 
     <div id="feedback_form_wrapper">
 
         <header>
-            <span role="button" id="return_to_main_help"></span>
+
+          <h2>
+        ${Text(_('{platform_name} Help')).format(
+            platform_name=HTML(u'<span class="edx">{}</span>').format(static.get_platform_name())
+        )}
+          </h2>
+          <hr>
         </header>
+
+        <button id="return_to_main_help">
+          <span class="icon fa fa-chevron-left" aria-hidden="true"></span>
+          <span class="sr">
+            ${_('Return to main help')}
+          </span>
+        <h3 id="help_modal_title"></h3>
+        </button>
 
         <form id="feedback_form" class="feedback_form" method="post" data-remote="true" action="/submit_feedback">
           <div class="feedback-form-error" aria-live="polite">
@@ -105,6 +118,9 @@ from xmodule.tabs import CourseTabList
             <input name="submit" type="submit" value="${_('Submit')}" id="feedback_submit">
           </div>
         </form>
+    <p class="note">${_('Please note: The {platform_name} support team is English speaking. While we will do our best to address your inquiry in any language, our responses will be in English.').format(
+            platform_name=static.get_platform_name()
+        )}</p>
     </div>
 
     <div id="feedback_success_wrapper">
@@ -123,6 +139,11 @@ from xmodule.tabs import CourseTabList
             open_time = "14:00"
             close_time = "22:00"
         %>
+          <h2>
+        ${Text(_('{platform_name} Help')).format(
+            platform_name=HTML(u'<span class="edx">{}</span>').format(static.get_platform_name())
+        )}
+          </h2>
         <p>
         ${Text(_(
             'Thank you for your inquiry or feedback.  We typically respond to a request '
@@ -182,7 +203,7 @@ $(document).ready(function() {
         DialogTabControls.initializeTabKeyValues("#feedback_form_wrapper", $closeButton);
         $("#feedback_form input[name='issue_type']").val(issue_type);
         $("#feedback_form_wrapper").css("display", "block");
-        $("#return_to_main_help").html("<h2>" + title + "</h2><hr>");
+        $("#help_modal_title").html(title);
         $("#feedback_form_wrapper label[data-field='subject']").html(subject_label);
         $("#feedback_form_wrapper label[data-field='details']").html(details_label);
         $closeButton.focus();

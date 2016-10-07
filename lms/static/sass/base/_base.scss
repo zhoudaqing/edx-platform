@@ -246,41 +246,65 @@ mark {
   }
 }
 
-.help-tab {
-    @include transform(rotate(-90deg));
-    @include transform-origin(0 0);
-    @extend %ui-depth2;
-    @extend %ui-print-excluded;
-    position: fixed;
-    top: 250px;
-    left: 0;
-
-    a:link,
-    a:visited {
-        border: 1px solid $gray-l3;
-        border-top-style: none;
-        border-radius: 0 0 ($baseline/2) ($baseline/2);
-        background: transparentize($white, 0.25);
-        color: transparentize($base-font-color, 0.25);
-        font-weight: bold;
-        text-decoration: none;
-        padding: 6px 22px 11px;
+#help-modal {
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding-left: 1em;
+        margin: 1em auto 1em auto;
+        color: $uxpl-blue-base;
+    }
+    li:before {
+        content: "\f054"; /* Chevron Right */
+        font-family: FontAwesome;
         display: inline-block;
+        margin-left: -1em;
+        width: 1em;
+        color: $uxpl-blue-base;
+    }
 
-        &:hover,
-        &:focus {
-            color: $white;
-            background: $link-color;
+    .help-modal-button {
+        cursor: pointer;
+        box-shadow: none;
+        color: $uxpl-blue-base;
+    }
+
+    .inner-wrapper {
+        form {
+            padding: 0px;
         }
     }
 }
 
-.help-link-button, #return_to_main_help {
+.help-link-button {
     cursor: pointer;
 }
 
-#return_to_main_help:hover {
-    text-decoration: underline;
+#return_to_main_help {
+  border: none;
+  padding: 10px;
+  z-index: 100;
+  text-shadow: none;
+  background: none;
+  box-shadow: none;
+  font-size: 1.1em;
+  margin-bottom: .5em;
+  color: $uxpl-blue-base;
+  &:hover {
+      font-weight: bold;
+  }
+  h3 {
+      color: $uxpl-blue-base;
+      margin-left: .4em;
+      border: 0px;
+      display: inline-block;
+  }
+}
+
+#help-modal-title {
+    display: inline-block;
 }
 
 #feedback_form {
