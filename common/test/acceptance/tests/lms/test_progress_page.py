@@ -262,6 +262,64 @@ class PersistentGradesTest(ProgressPageBaseTest):
             self.assertEqual(self._get_problem_scores(), [(0, 1), (0, 1)])
             self.assertEqual(self._get_section_score(), (0, 2))
 
+    RescoreTestData = namedtuple(
+        'RescoreTestData',
+        'answer, action, '
+        'orig_problem_scores, orig_subsection_scores, '
+        'expected_problem_scores, expected_subsection_scores',
+    )
+
+    @ddt.data(
+        # incorrect answer becomes correct
+        #   -> both rescore actions increase the score
+        RescoreTestData(
+            answer=1, action='rescore_button',
+            orig_problem_scores=[(0, 1), (0, 1)], orig_subsection_scores=(0, 2),
+            expected_problem_scores=[(1, 1), (0, 1)], expected_subsection_scores=(1, 2),
+        ),
+        RescoreTestData(
+            answer=1, action='rescore_if_higher_button',
+            orig_problem_scores=[(0, 1), (0, 1)], orig_subsection_scores=(0, 2),
+            expected_problem_scores=[(1, 1), (0, 1)], expected_subsection_scores=(1, 2),
+        ),
+
+        # correct answer becomes incorrect
+        #   -> rescore action decreases the score
+        #   -> rescore_if_higher does not affect the score
+        RescoreTestData(
+            answer=2, action='rescore_button',
+            orig_problem_scores=[(1, 1), (0, 1)], orig_subsection_scores=(1, 2),
+            expected_problem_scores=[(0, 1), (0, 1)], expected_subsection_scores=(0, 2),
+        ),
+        RescoreTestData(
+            answer=2, action='rescore_if_higher_button',
+            orig_problem_scores=[(1, 1), (0, 1)], orig_subsection_scores=(1, 2),
+            expected_problem_scores=[(1, 1), (0, 1)], expected_subsection_scores=(1, 2),
+        ),
+    )
+    @ddt.unpack
+    def test_rescore_affects_score_correctly(
+            self, answer, action,
+            orig_problem_scores, orig_subsection_scores,
+            expected_problem_scores, expected_subsection_scores,
+    ):
+        with self._logged_in_session():
+            self.courseware_page.visit()
+            self._answer_problem(choice=answer)
+
+        with self._logged_in_session():
+            self.assertEqual(self._get_problem_scores(), orig_problem_scores)
+            self.assertEqual(self._get_section_score(), orig_subsection_scores)
+
+        with self._logged_in_session(staff=True):
+            self._change_correct_answer_for_problem()
+            student_admin_section = self._student_admin_action_for_problem(action)
+            student_admin_section.wait_for_task_completion('Problem successfully rescored for student')
+
+        with self._logged_in_session():
+            self.assertEqual(self._get_problem_scores(), expected_problem_scores)
+            self.assertEqual(self._get_section_score(), expected_subsection_scores)
+
 
 class SubsectionGradingPolicyTest(ProgressPageBaseTest):
     """
