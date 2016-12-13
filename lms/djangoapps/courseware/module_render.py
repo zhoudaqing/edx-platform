@@ -713,6 +713,7 @@ def get_module_system_for_user(user, student_data,  # TODO  # pylint: disable=to
 
 # TODO: Find all the places that this method is called and figure out how to
 # get a loaded course passed into it
+from openedx.core.djangoapps.performance.utils import collect_profile
 def get_module_for_descriptor_internal(user, descriptor, student_data, course_id,  # pylint: disable=invalid-name
                                        track_function, xqueue_callback_url_prefix, request_token,
                                        position=None, wrap_xmodule_display=True, grade_bucket_type=None,
@@ -726,44 +727,44 @@ def get_module_for_descriptor_internal(user, descriptor, student_data, course_id
     Arguments:
         request_token (str): A unique token for this request, used to isolate xblock rendering
     """
+    with collect_profile('get_module_descriptor'):
+        (system, student_data) = get_module_system_for_user(
+            user=user,
+            student_data=student_data,  # These have implicit user bindings, the rest of args are considered not to
+            descriptor=descriptor,
+            course_id=course_id,
+            track_function=track_function,
+            xqueue_callback_url_prefix=xqueue_callback_url_prefix,
+            position=position,
+            wrap_xmodule_display=wrap_xmodule_display,
+            grade_bucket_type=grade_bucket_type,
+            static_asset_path=static_asset_path,
+            user_location=user_location,
+            request_token=request_token,
+            disable_staff_debug_info=disable_staff_debug_info,
+            course=course
+        )
 
-    (system, student_data) = get_module_system_for_user(
-        user=user,
-        student_data=student_data,  # These have implicit user bindings, the rest of args are considered not to
-        descriptor=descriptor,
-        course_id=course_id,
-        track_function=track_function,
-        xqueue_callback_url_prefix=xqueue_callback_url_prefix,
-        position=position,
-        wrap_xmodule_display=wrap_xmodule_display,
-        grade_bucket_type=grade_bucket_type,
-        static_asset_path=static_asset_path,
-        user_location=user_location,
-        request_token=request_token,
-        disable_staff_debug_info=disable_staff_debug_info,
-        course=course
-    )
+        descriptor.bind_for_student(
+            system,
+            user.id,
+            [
+                partial(OverrideFieldData.wrap, user, course),
+                partial(LmsFieldData, student_data=student_data),
+            ],
+        )
 
-    descriptor.bind_for_student(
-        system,
-        user.id,
-        [
-            partial(OverrideFieldData.wrap, user, course),
-            partial(LmsFieldData, student_data=student_data),
-        ],
-    )
+        descriptor.scope_ids = descriptor.scope_ids._replace(user_id=user.id)
 
-    descriptor.scope_ids = descriptor.scope_ids._replace(user_id=user.id)
-
-    # Do not check access when it's a noauth request.
-    # Not that the access check needs to happen after the descriptor is bound
-    # for the student, since there may be field override data for the student
-    # that affects xblock visibility.
-    user_needs_access_check = getattr(user, 'known', True) and not isinstance(user, SystemUser)
-    if user_needs_access_check:
-        if not has_access(user, 'load', descriptor, course_id):
-            return None
-    return descriptor
+        # Do not check access when it's a noauth request.
+        # Not that the access check needs to happen after the descriptor is bound
+        # for the student, since there may be field override data for the student
+        # that affects xblock visibility.
+        user_needs_access_check = getattr(user, 'known', True) and not isinstance(user, SystemUser)
+        if user_needs_access_check:
+            if not has_access(user, 'load', descriptor, course_id):
+                return None
+        return descriptor
 
 
 def load_single_xblock(request, user_id, course_id, usage_key_string, course=None):
