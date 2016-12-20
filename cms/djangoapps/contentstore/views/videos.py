@@ -97,6 +97,8 @@ def videos_handler(request, course_key_string):
     if not course:
         return HttpResponseNotFound()
 
+    from nose.tools import set_trace; set_trace()
+
     if request.method == "GET":
         if "application/json" in request.META.get("HTTP_ACCEPT", ""):
             return videos_index_json(course)

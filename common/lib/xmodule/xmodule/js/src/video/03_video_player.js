@@ -2,8 +2,8 @@
 // VideoPlayer module.
     define(
 'video/03_video_player.js',
-['video/02_html5_video.js', 'video/00_resizer.js'],
-function(HTML5Video, Resizer) {
+['video/02_html5_video.js', 'video/025_html5_hls_video.js', 'video/00_resizer.js'],
+function(HTML5Video, HLSVideo, Resizer) {
     var dfd = $.Deferred(),
         VideoPlayer = function(state) {
             state.videoPlayer = {};
@@ -101,7 +101,7 @@ function(HTML5Video, Resizer) {
     //     via the 'state' object. Much easier to work this way - you don't
     //     have to do repeated jQuery element selects.
     function _initialize(state) {
-        var youTubeId, player, userAgent;
+        var youTubeId, player, userAgent, config;
 
         // The function is called just once to apply pre-defined configurations
         // by student before video starts playing. Waits until the video's
@@ -157,7 +157,7 @@ function(HTML5Video, Resizer) {
                                  !state.browserIsChrome);
 
         if (state.videoType === 'html5') {
-            state.videoPlayer.player = new HTML5Video.Player(state.el, {
+            config = {
                 playerVars: state.videoPlayer.playerVars,
                 videoSources: state.config.sources,
                 events: {
@@ -165,7 +165,13 @@ function(HTML5Video, Resizer) {
                     onStateChange: state.videoPlayer.onStateChange,
                     onError: state.videoPlayer.onError
                 }
-            });
+            };
+            debugger;
+            if (state.HLSVideoAvailable) {
+                state.videoPlayer.player = new HTML5Video.Player(state.el, config);
+            } else {
+                state.videoPlayer.player = new HTML5Video.Player(state.el, config);
+            }
 
             player = state.videoEl = state.videoPlayer.player.videoEl;
             player[0].addEventListener('loadedmetadata', state.videoPlayer.onLoadMetadataHtml5, false);

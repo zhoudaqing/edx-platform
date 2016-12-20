@@ -18,6 +18,10 @@
         // rendered template and then use this to ensure that RequireJS knows
         // how to find it.
         define('gettext', function() { return window.gettext; });
+
+        define("add-video-js-in-global-scope", ["videojs"], function(videojs) {
+            window.videojs = videojs;
+        });
     }
 
     require.config({
@@ -91,6 +95,9 @@
             'catch': 'js/vendor/ova/catch/js/catch',
             'handlebars': 'js/vendor/ova/catch/js/handlebars-1.1.2',
             'lang_edx': 'js/src/lang_edx',
+            'hls': 'common/js/vendor/hls.min',
+            'videojs': 'common/js/vendor/video.min',
+            'videojs-contrib-hls': 'common/js/vendor/videojs-contrib-hls',
             // end of Annotation tool files
 
             // externally hosted files
@@ -203,6 +210,9 @@
             },
             'lang_edx': {
                 deps: ['jquery']
+            },
+            'videojs-contrib-hls': {
+                deps: ["add-video-js-in-global-scope"]
             },
             'mathjax': {
                 exports: 'MathJax',

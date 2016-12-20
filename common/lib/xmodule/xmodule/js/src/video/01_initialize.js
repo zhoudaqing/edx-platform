@@ -14,8 +14,8 @@
 (function(requirejs, require, define) {
     define(
 'video/01_initialize.js',
-['video/03_video_player.js', 'video/00_i18n.js', 'moment', 'underscore'],
-function(VideoPlayer, i18n, moment, _) {
+['video/03_video_player.js', 'video/00_i18n.js', 'moment', 'underscore', 'underscore.string'],
+function(VideoPlayer, i18n, moment, _, str) {
     var moment = moment || window.moment;
     /**
      * @function
@@ -298,6 +298,10 @@ function(VideoPlayer, i18n, moment, _) {
         }
 
         state.videoType = 'html5';
+
+        if (str.endsWith(state.config.sources[0], '.m3u8')) {
+            state.HLSVideoAvailable = true;
+        }
 
         if (!_.keys(state.config.transcriptLanguages).length) {
             state.config.showCaptions = false;

@@ -15,9 +15,9 @@
 
 (function(requirejs, require, define) {
     define(
-'video/02_html5_video.js',
-['hls'],
-function(HLS) {
+'video/025_html5_hls_video.js',
+['videojs', 'videojs-contrib-hls'],
+function(VideoJS, VideoJSHLS) {
     var HTML5Video = {};
 
     HTML5Video.Player = (function() {
@@ -39,9 +39,7 @@ function(HLS) {
                 value <= this.video.duration &&
                 value >= 0
             ) {
-                debugger;
                 this.video.currentTime = value;
-                this.hls.config.startPosition = value;
             }
         };
 
@@ -336,18 +334,28 @@ function(HLS) {
             // lastSource.on('error', this.onError.bind(this));
             // this.videoEl.on('error', this.onError.bind(this));
 
-            var hls = new HLS();
-            hls.loadSource(config.videoSources[0]);
-            hls.attachMedia(this.video);
-            hls.on(HLS.Events.MANIFEST_PARSED, function(data) {
-                console.log('HLS video is ready to play');
-                console.log(data);
-                // self.video.play();
+            this.commonSetup(this.el);
+
+            var options = {
+                controls: false,
+                autoplay: true,
+                html5: {
+                    hls: {
+                        debug: true
+                    }
+                }
+            };
+
+            window.videojs.registerComponent('Hls', VideoJSHLS);
+            var player = window.videojs(this.video, options);
+
+            player.src({
+                src: config.videoSources[0],
+                type: 'application/x-mpegURL'
+                // withCredentials: true
             });
 
-            this.hls = hls;
-
-            this.commonSetup(this.el);
+            // this.commonSetup(this.el);
         }
     }());
 

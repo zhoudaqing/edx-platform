@@ -57,6 +57,10 @@ NPM_INSTALLED_LIBRARIES = [
     'backbone-validation/dist/backbone-validation-min.js',
     'edx-ui-toolkit/node_modules/moment-timezone/builds/moment-timezone-with-data.js',
     'edx-ui-toolkit/node_modules/moment/min/moment-with-locales.js',
+    'hls.js/dist/hls.min.js',
+    'video.js/dist/video.min.js',
+    # 'videojs-contrib-hls.js/dist/videojs-contrib-hlsjs.js',
+    'videojs-contrib-hls/dist/videojs-contrib-hls.js',
 ]
 
 # Directory to install static vendor files
