@@ -58,6 +58,7 @@ NPM_INSTALLED_LIBRARIES = [
     'requirejs/require.js',
     'underscore.string/dist/underscore.string.js',
     'underscore/underscore.js',
+    'bootstrap-poc/dist/bootstrap-poc.js'
 ]
 
 # A list of NPM installed developer libraries that should be copied into the common
