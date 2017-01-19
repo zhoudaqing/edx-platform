@@ -349,6 +349,7 @@ class DiscussionTabSingleThreadTest(BaseDiscussionTestCase, DiscussionResponsePa
         self.setup_thread_page(thread_id)
         self.assertEqual(self.thread_page.get_link_href(), sample_link)
 
+    @flaky(max_runs=75, min_passes=75)
     def test_marked_answer_comments(self):
         thread_id = "test_thread_{}".format(uuid4().hex)
         response_id = "test_response_{}".format(uuid4().hex)
