@@ -9,21 +9,23 @@ import json
 from urlparse import urljoin
 
 import ddt
+import httpretty
+import mock
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
 from django.test.utils import override_settings
-import httpretty
-import mock
 from opaque_keys.edx.keys import CourseKey
 from requests import Timeout
 
-from student.models import UNENROLL_DONE
-from student.tests.factories import UserFactory, CourseEnrollmentFactory
-from commerce.signals import (refund_seat, send_refund_notification, generate_refund_notification_body,
-                              create_zendesk_ticket)
-from commerce.tests import TEST_PUBLIC_URL_ROOT, TEST_API_URL, TEST_API_SIGNING_KEY, JSON
+from commerce.signals import (
+    send_refund_notification, generate_refund_notification_body, create_zendesk_ticket, refund_seat
+)
+from commerce.tests import TEST_API_URL, JSON
 from commerce.tests.mocks import mock_create_refund
 from course_modes.models import CourseMode
+from student.models import UNENROLL_DONE
+from student.tests.factories import UserFactory, CourseEnrollmentFactory
 
 ZENDESK_URL = 'http://zendesk.example.com/'
 ZENDESK_USER = 'test@example.com'
@@ -32,9 +34,7 @@ ZENDESK_API_KEY = 'abc123'
 
 @ddt.ddt
 @override_settings(
-    ECOMMERCE_PUBLIC_URL_ROOT=TEST_PUBLIC_URL_ROOT,
-    ECOMMERCE_API_URL=TEST_API_URL, ECOMMERCE_API_SIGNING_KEY=TEST_API_SIGNING_KEY,
-    ZENDESK_URL=ZENDESK_URL, ZENDESK_USER=ZENDESK_USER, ZENDESK_API_KEY=ZENDESK_API_KEY
+    ECOMMERCE_API_URL=TEST_API_URL, ZENDESK_URL=ZENDESK_URL, ZENDESK_USER=ZENDESK_USER, ZENDESK_API_KEY=ZENDESK_API_KEY
 )
 class TestRefundSignal(TestCase):
     """
@@ -43,6 +43,10 @@ class TestRefundSignal(TestCase):
 
     def setUp(self):
         super(TestRefundSignal, self).setUp()
+
+        # Ensure the E-Commerce service user exists
+        UserFactory(username=settings.ECOMMERCE_SERVICE_WORKER_USERNAME, is_staff=True)
+
         self.requester = UserFactory(username="test-requester")
         self.student = UserFactory(
             username="test-student",
@@ -65,7 +69,6 @@ class TestRefundSignal(TestCase):
     @override_settings(
         ECOMMERCE_PUBLIC_URL_ROOT=None,
         ECOMMERCE_API_URL=None,
-        ECOMMERCE_API_SIGNING_KEY=None,
     )
     def test_no_service(self):
         """

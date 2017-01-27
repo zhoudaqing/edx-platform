@@ -17,7 +17,7 @@ from rest_framework.utils.encoders import JSONEncoder
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
-from commerce.tests import TEST_API_URL, TEST_API_SIGNING_KEY
+from commerce.tests import TEST_API_URL
 from commerce.tests.mocks import mock_order_endpoint
 from commerce.tests.test_views import UserMixin
 from course_modes.models import CourseMode
@@ -391,7 +391,7 @@ class CourseRetrieveUpdateViewTests(CourseApiViewTestMixin, ModuleStoreTestCase)
 
 
 @attr(shard=1)
-@override_settings(ECOMMERCE_API_URL=TEST_API_URL, ECOMMERCE_API_SIGNING_KEY=TEST_API_SIGNING_KEY)
+@override_settings(ECOMMERCE_API_URL=TEST_API_URL)
 class OrderViewTests(UserMixin, TestCase):
     """ Tests for the basket order view. """
     view_name = 'commerce_api:v1:orders:detail'
