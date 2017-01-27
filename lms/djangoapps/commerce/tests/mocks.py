@@ -6,7 +6,9 @@ import httpretty
 from commerce.tests import TEST_API_URL, factories
 
 
-class mock_ecommerce_api_endpoint(object):  # pylint: disable=invalid-name
+# pylint: disable=invalid-name
+
+class mock_ecommerce_api_endpoint(object):
     """
     Base class for contextmanagers used to mock calls to api endpoints.
 
@@ -48,7 +50,6 @@ class mock_ecommerce_api_endpoint(object):  # pylint: disable=invalid-name
         raise self.exception  # pylint: disable=raising-bad-type
 
     def __enter__(self):
-        httpretty.reset()
         httpretty.enable()
         httpretty.register_uri(
             self.method,
@@ -63,7 +64,7 @@ class mock_ecommerce_api_endpoint(object):  # pylint: disable=invalid-name
         httpretty.disable()
 
 
-class mock_create_basket(mock_ecommerce_api_endpoint):  # pylint: disable=invalid-name
+class mock_create_basket(mock_ecommerce_api_endpoint):
     """ Mocks calls to E-Commerce API client basket creation method. """
 
     default_response = {
@@ -81,7 +82,7 @@ class mock_create_basket(mock_ecommerce_api_endpoint):  # pylint: disable=invali
         return TEST_API_URL + '/baskets/'
 
 
-class mock_basket_order(mock_ecommerce_api_endpoint):  # pylint: disable=invalid-name
+class mock_basket_order(mock_ecommerce_api_endpoint):
     """ Mocks calls to E-Commerce API client basket order method. """
 
     default_response = {'number': 1}
@@ -95,7 +96,7 @@ class mock_basket_order(mock_ecommerce_api_endpoint):  # pylint: disable=invalid
         return TEST_API_URL + '/baskets/{}/order/'.format(self.basket_id)
 
 
-class mock_create_refund(mock_ecommerce_api_endpoint):  # pylint: disable=invalid-name
+class mock_create_refund(mock_ecommerce_api_endpoint):
     """ Mocks calls to E-Commerce API client refund creation method. """
 
     default_response = []
@@ -105,7 +106,21 @@ class mock_create_refund(mock_ecommerce_api_endpoint):  # pylint: disable=invali
         return TEST_API_URL + '/refunds/'
 
 
-class mock_order_endpoint(mock_ecommerce_api_endpoint):  # pylint: disable=invalid-name
+class mock_process_refund(mock_ecommerce_api_endpoint):
+    """ Mocks calls to E-Commerce API client refund process method. """
+
+    default_response = []
+    method = httpretty.PUT
+
+    def __init__(self, refund_id, **kwargs):
+        super(mock_process_refund, self).__init__(**kwargs)
+        self.refund_id = refund_id
+
+    def get_uri(self):
+        return TEST_API_URL + '/refunds/{}/process/'.format(self.refund_id)
+
+
+class mock_order_endpoint(mock_ecommerce_api_endpoint):
     """ Mocks calls to E-Commerce API client basket order method. """
 
     default_response = {'number': 'EDX-100001'}
@@ -119,7 +134,7 @@ class mock_order_endpoint(mock_ecommerce_api_endpoint):  # pylint: disable=inval
         return TEST_API_URL + '/orders/{}/'.format(self.order_number)
 
 
-class mock_get_orders(mock_ecommerce_api_endpoint):  # pylint: disable=invalid-name
+class mock_get_orders(mock_ecommerce_api_endpoint):
     """ Mocks calls to E-Commerce API client order get method. """
 
     default_response = {
