@@ -20,7 +20,7 @@ define([
                 AjaxHelpers.respondWithJson(requests, responseData);
             };
 
-            mockRender = function(useEcommerceOrderNumber, isVerified, requestInThemedSite) {
+            mockRender = function(isVerified, requestInThemedSite) {
                 var requests, view, orderUrlFormat,
                     actualRequestInThemedSite = requestInThemedSite;
                 if (typeof actualRequestInThemedSite === 'undefined') {
@@ -33,13 +33,8 @@ define([
                 });
                 view = createReceiptView();
                 view.useEcommerceApi = true;
-                if (useEcommerceOrderNumber) {
-                    view.ecommerceOrderNumber = 'EDX-123456';
-                    orderUrlFormat = '/api/commerce/v1/orders/EDX-123456/';
-                } else {
-                    view.ecommerceBasketId = 'EDX-123456';
-                    orderUrlFormat = '/api/commerce/v0/baskets/EDX-123456/order/';
-                }
+                view.ecommerceOrderNumber = 'EDX-123456';
+                orderUrlFormat = '/api/commerce/v1/orders/EDX-123456/';
                 view.render();
                 mockRequests(requests, 'GET', orderUrlFormat, data);
 
@@ -153,7 +148,7 @@ define([
             doCheckVerificationNagRendered = function(attributes, userVerified, expected, requestInThemedSite) {
                 var view;
                 data = createOrderResponse([createLine(createProduct(attributes))]);
-                view = mockRender(true, userVerified, requestInThemedSite);
+                view = mockRender(userVerified, requestInThemedSite);
                 if (expected) {
                     expect(view.$('.nav-wizard.is-ready').text()).toContain('Want to confirm your identity later');
                 } else {
@@ -207,7 +202,7 @@ define([
             });
 
             it('sends analytic event when verified receipt is rendered', function() {
-                mockRender(true, 'True');
+                mockRender('True');
                 expect(window.analytics.track).toHaveBeenCalledWith(
                     'Completed Purchase',
                     {
@@ -219,7 +214,7 @@ define([
             });
 
             it('sends analytic event when non verified receipt is rendered', function() {
-                mockRender(true, 'False');
+                mockRender('False');
                 expect(window.analytics.track).toHaveBeenCalledWith(
                     'Completed Purchase',
                     {
@@ -233,14 +228,7 @@ define([
             it('renders a receipt correctly with Ecommerce Order Number', function() {
                 var view;
 
-                view = mockRender(true, 'True');
-                expect(view.$('.course_name_placeholder').text()).toContain('receipt test');
-            });
-
-            it('renders a receipt correctly with Ecommerce Basket Id', function() {
-                var view;
-
-                view = mockRender(false, 'True');
+                view = mockRender('True');
                 expect(view.$('.course_name_placeholder').text()).toContain('receipt test');
             });
 

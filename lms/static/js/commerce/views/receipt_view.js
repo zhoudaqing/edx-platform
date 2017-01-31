@@ -12,13 +12,11 @@ var edx = edx || {};
 
     edx.commerce.ReceiptView = Backbone.View.extend({
         useEcommerceApi: true,
-        ecommerceBasketId: null,
         ecommerceOrderNumber: null,
 
         initialize: function() {
-            this.ecommerceBasketId = $.url('?basket_id');
             this.ecommerceOrderNumber = $.url('?orderNum');
-            this.useEcommerceApi = this.ecommerceBasketId || this.ecommerceOrderNumber;
+            this.useEcommerceApi = this.ecommerceOrderNumber;
             _.bindAll(this, 'renderReceipt', 'renderError', 'getProviderData', 'renderProvider', 'getCourseData');
 
             this.render();
@@ -133,7 +131,7 @@ var edx = edx || {};
 
         render: function() {
             var self = this,
-                orderId = this.ecommerceOrderNumber || this.ecommerceBasketId || $.url('?payment-order-num');
+                orderId = this.ecommerceOrderNumber || $.url('?payment-order-num');
 
             if (orderId && this.$el.data('is-payment-complete') === 'True') {
                 // Get the order details
@@ -172,8 +170,6 @@ var edx = edx || {};
 
             if (this.ecommerceOrderNumber) {
                 urlFormat = '/api/commerce/v1/orders/{orderId}/';
-            } else if (this.ecommerceBasketId) {
-                urlFormat = '/api/commerce/v0/baskets/{orderId}/order/';
             }
 
             return $.ajax({

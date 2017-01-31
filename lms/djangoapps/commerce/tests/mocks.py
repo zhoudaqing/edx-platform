@@ -2,8 +2,9 @@
 import json
 
 import httpretty
+from django.conf import settings
 
-from commerce.tests import TEST_API_URL, factories
+from commerce.tests import factories
 
 
 # pylint: disable=invalid-name
@@ -23,6 +24,8 @@ class mock_ecommerce_api_endpoint(object):
     # override this in subclasses, using one of httpretty's method constants
     method = None
 
+    host = settings.ECOMMERCE_API_URL.strip('/')
+
     def __init__(self, response=None, status=200, expect_called=True, exception=None):
         """
         Keyword Arguments:
@@ -39,9 +42,18 @@ class mock_ecommerce_api_endpoint(object):
 
     def get_uri(self):
         """
-        Return the uri to register with httpretty for this contextmanager.
+        Returns the uri to register with httpretty for this contextmanager.
+        """
+        return self.host + '/' + self.get_path().lstrip('/')
+
+    def get_path(self):
+        """
+        Returns the path of the URI to register with httpretty for this contextmanager.
 
         Subclasses must override this method.
+
+        Returns:
+            str
         """
         raise NotImplementedError
 
@@ -78,8 +90,8 @@ class mock_create_basket(mock_ecommerce_api_endpoint):
     }
     method = httpretty.POST
 
-    def get_uri(self):
-        return TEST_API_URL + '/baskets/'
+    def get_path(self):
+        return '/baskets/'
 
 
 class mock_basket_order(mock_ecommerce_api_endpoint):
@@ -92,8 +104,8 @@ class mock_basket_order(mock_ecommerce_api_endpoint):
         super(mock_basket_order, self).__init__(**kwargs)
         self.basket_id = basket_id
 
-    def get_uri(self):
-        return TEST_API_URL + '/baskets/{}/order/'.format(self.basket_id)
+    def get_path(self):
+        return '/baskets/{}/order/'.format(self.basket_id)
 
 
 class mock_create_refund(mock_ecommerce_api_endpoint):
@@ -102,8 +114,8 @@ class mock_create_refund(mock_ecommerce_api_endpoint):
     default_response = []
     method = httpretty.POST
 
-    def get_uri(self):
-        return TEST_API_URL + '/refunds/'
+    def get_path(self):
+        return '/refunds/'
 
 
 class mock_process_refund(mock_ecommerce_api_endpoint):
@@ -116,8 +128,8 @@ class mock_process_refund(mock_ecommerce_api_endpoint):
         super(mock_process_refund, self).__init__(**kwargs)
         self.refund_id = refund_id
 
-    def get_uri(self):
-        return TEST_API_URL + '/refunds/{}/process/'.format(self.refund_id)
+    def get_path(self):
+        return '/refunds/{}/process/'.format(self.refund_id)
 
 
 class mock_order_endpoint(mock_ecommerce_api_endpoint):
@@ -130,8 +142,8 @@ class mock_order_endpoint(mock_ecommerce_api_endpoint):
         super(mock_order_endpoint, self).__init__(**kwargs)
         self.order_number = order_number
 
-    def get_uri(self):
-        return TEST_API_URL + '/orders/{}/'.format(self.order_number)
+    def get_path(self):
+        return '/orders/{}/'.format(self.order_number)
 
 
 class mock_get_orders(mock_ecommerce_api_endpoint):
@@ -153,5 +165,5 @@ class mock_get_orders(mock_ecommerce_api_endpoint):
     }
     method = httpretty.GET
 
-    def get_uri(self):
-        return TEST_API_URL + '/orders/'
+    def get_path(self):
+        return '/orders/'

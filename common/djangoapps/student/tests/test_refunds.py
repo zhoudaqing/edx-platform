@@ -130,7 +130,6 @@ class RefundableTest(SharedModuleStoreTestCase):
     )
     @ddt.unpack
     @httpretty.activate
-    @override_settings(ECOMMERCE_API_URL=TEST_API_URL)
     def test_refund_cutoff_date(self, order_date_delta, course_start_delta, expected_date_delta, days):
         """
         Assert that the later date is used with the configurable refund period in calculating the returned cutoff date.
@@ -171,7 +170,6 @@ class RefundableTest(SharedModuleStoreTestCase):
         self.assertIsNone(self.enrollment.refund_cutoff_date())
 
     @httpretty.activate
-    @override_settings(ECOMMERCE_API_URL=TEST_API_URL)
     def test_multiple_refunds_dashbaord_page_error(self):
         """ Order with mutiple refunds will not throw 500 error when dashboard page will access."""
         now = datetime.now(pytz.UTC).replace(microsecond=0)

@@ -32,9 +32,7 @@ ZENDESK_API_KEY = 'abc123'
 
 
 @ddt.ddt
-@override_settings(
-    ECOMMERCE_API_URL=TEST_API_URL, ZENDESK_URL=ZENDESK_URL, ZENDESK_USER=ZENDESK_USER, ZENDESK_API_KEY=ZENDESK_API_KEY
-)
+@override_settings(ZENDESK_URL=ZENDESK_URL, ZENDESK_USER=ZENDESK_USER, ZENDESK_API_KEY=ZENDESK_API_KEY)
 class TestRefundSignal(TestCase):
     """
     Exercises logic triggered by the UNENROLL_DONE signal.

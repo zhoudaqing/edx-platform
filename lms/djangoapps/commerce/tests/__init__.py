@@ -3,8 +3,8 @@
 
 import httpretty
 import mock
+from django.conf import settings
 from django.test import TestCase
-from django.test.utils import override_settings
 from freezegun import freeze_time
 
 from openedx.core.djangoapps.commerce.utils import ecommerce_api_client
@@ -13,7 +13,6 @@ from student.tests.factories import UserFactory
 
 JSON = 'application/json'
 TEST_PUBLIC_URL_ROOT = 'http://www.example.com'
-TEST_API_URL = 'http://www-internal.example.com/api'
 TEST_BASKET_ID = 7
 TEST_ORDER_NUMBER = '100004'
 TEST_PAYMENT_DATA = {
@@ -23,7 +22,6 @@ TEST_PAYMENT_DATA = {
 }
 
 
-@override_settings(ECOMMERCE_API_URL=TEST_API_URL)
 class EdxRestApiClientTest(TestCase):
     """ Tests to ensure the client is initialized properly. """
 
@@ -44,7 +42,7 @@ class EdxRestApiClientTest(TestCase):
         # fake an E-Commerce API request.
         httpretty.register_uri(
             httpretty.POST,
-            '{}/baskets/1/'.format(TEST_API_URL),
+            '{}/baskets/1/'.format(settings.ECOMMERCE_API_URL),
             status=200, body='{}',
             adding_headers={'Content-Type': JSON}
         )
@@ -79,7 +77,7 @@ class EdxRestApiClientTest(TestCase):
         expected_content = '{"result": "Préparatoire"}'
         httpretty.register_uri(
             httpretty.GET,
-            '{}/baskets/1/order/'.format(TEST_API_URL),
+            '{}/baskets/1/order/'.format(settings.ECOMMERCE_API_URL),
             status=200, body=expected_content,
             adding_headers={'Content-Type': JSON},
         )

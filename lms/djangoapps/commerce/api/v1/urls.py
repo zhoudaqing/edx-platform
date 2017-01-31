@@ -4,6 +4,11 @@ from django.conf.urls import patterns, url, include
 
 from commerce.api.v1 import views
 
+BASKET_URLS = patterns(
+    '',
+    url(r'^$', views.BasketsView.as_view(), name='create'),
+)
+
 COURSE_URLS = patterns(
     '',
     url(r'^$', views.CourseListView.as_view(), name='list'),
@@ -17,6 +22,7 @@ ORDER_URLS = patterns(
 
 urlpatterns = patterns(
     '',
+    url(r'^baskets/', include(BASKET_URLS, namespace='baskets')),
     url(r'^courses/', include(COURSE_URLS, namespace='courses')),
     url(r'^orders/', include(ORDER_URLS, namespace='orders')),
 )

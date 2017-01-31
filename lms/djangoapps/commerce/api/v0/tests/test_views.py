@@ -17,7 +17,7 @@ from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
 from commerce.constants import Messages
-from commerce.tests import TEST_BASKET_ID, TEST_ORDER_NUMBER, TEST_PAYMENT_DATA, TEST_API_URL
+from commerce.tests import TEST_BASKET_ID, TEST_ORDER_NUMBER, TEST_PAYMENT_DATA
 from commerce.tests.mocks import mock_basket_order, mock_create_basket
 from commerce.tests.test_views import UserMixin
 from course_modes.models import CourseMode
@@ -39,7 +39,6 @@ UTM_COOKIE_CONTENTS = {
 
 @attr(shard=1)
 @ddt.ddt
-@override_settings(ECOMMERCE_API_URL=TEST_API_URL)
 class BasketsViewTests(EnrollmentEventTestMixin, UserMixin, ModuleStoreTestCase):
     """
     Tests for the commerce orders view.
@@ -387,38 +386,3 @@ class BasketsViewTests(EnrollmentEventTestMixin, UserMixin, ModuleStoreTestCase)
         modulestore().update_item(self.course, self.user.id)  # pylint:disable=no-member
         with mock_create_basket(expect_called=False):
             self.assertEqual(self._post_to_view().status_code, 406)
-
-
-@attr(shard=1)
-@override_settings(ECOMMERCE_API_URL=TEST_API_URL)
-class BasketOrderViewTests(UserMixin, TestCase):
-    """ Tests for the basket order view. """
-    view_name = 'commerce_api:v0:baskets:retrieve_order'
-    MOCK_ORDER = {'number': 1}
-    path = reverse(view_name, kwargs={'basket_id': 1})
-
-    def setUp(self):
-        super(BasketOrderViewTests, self).setUp()
-        self._login()
-
-    def test_order_found(self):
-        """ If the order is located, the view should pass the data from the API. """
-
-        with mock_basket_order(basket_id=1, response=self.MOCK_ORDER):
-            response = self.client.get(self.path)
-
-        self.assertEqual(response.status_code, 200)
-        actual = json.loads(response.content)
-        self.assertEqual(actual, self.MOCK_ORDER)
-
-    def test_order_not_found(self):
-        """ If the order is not found, the view should return a 404. """
-        with mock_basket_order(basket_id=1, exception=exceptions.HttpNotFoundError):
-            response = self.client.get(self.path)
-        self.assertEqual(response.status_code, 404)
-
-    def test_login_required(self):
-        """ The view should return 403 if the user is not logged in. """
-        self.client.logout()
-        response = self.client.get(self.path)
-        self.assertEqual(response.status_code, 403)
