@@ -28,7 +28,7 @@ class CourseGrade(object):
     """
     Course Grade class
     """
-    def __init__(self, student, course, course_structure):
+    def __init__(self, student, course, course_structure=None):
         self.student = student
         self.course = course
         self._percent = None
@@ -222,49 +222,53 @@ class CourseGrade(object):
     @classmethod
     def load_persisted_grade(cls, user, course, course_structure):
         """
-        Initializes a CourseGrade object, filling its members with persisted values from the database.
+        Returns a CourseGrade object for the given user and course using
+        persisted values from the database.
 
-        If the grading policy is out of date, recomputes the grade.
-
+        If grading policy in the course_structure is outdated, returns None.
         If no persisted values are found, returns None.
         """
-        try:
-            persistent_grade = PersistentCourseGrade.read_course_grade(user.id, course.id)
-        except PersistentCourseGrade.DoesNotExist:
-            return None
-        course_grade = CourseGrade(user, course, course_structure)
-
-        current_grading_policy_hash = course_grade.get_grading_policy_hash(course.location, course_structure)
-        if current_grading_policy_hash != persistent_grade.grading_policy_hash:
-            return None
-        else:
-            course_grade._percent = persistent_grade.percent_grade  # pylint: disable=protected-access
-            course_grade._letter_grade = persistent_grade.letter_grade  # pylint: disable=protected-access
-            course_grade.course_version = persistent_grade.course_version
-            course_grade.course_edited_timestamp = persistent_grade.course_edited_timestamp
-
-        course_grade._log_event(log.info, u"load_persisted_grade")  # pylint: disable=protected-access
-
-        return course_grade
+        return cls._load_persisted_grade(user, course, course_structure, check_grading_policy=True)
 
     @classmethod
     def get_persisted_grade(cls, user, course):
         """
         Gets the persisted grade in the database, without checking
         whether it is up-to-date with the course's grading policy.
-        For read use only.
+        """
+        # course structure not needed when check_grading_policy is False.
+        return cls._load_persisted_grade(user, course, course_structure=None, check_grading_policy=False)
+
+    @classmethod
+    def _load_persisted_grade(cls, user, course, course_structure, check_grading_policy):
+        """
+        Returns a CourseGrade object for the given user and course using
+        persisted values from the database.
+
+        If check_grading_policy is True, verifies the grading policy is up-to-date.
+
+        If grading policy in the course_structure is outdated, returns None.
+        If no persisted values are found, returns None.
         """
         try:
             persistent_grade = PersistentCourseGrade.read_course_grade(user.id, course.id)
         except PersistentCourseGrade.DoesNotExist:
             return None
-        else:
-            course_grade = CourseGrade(user, course, None)  # no course structure needed
-            course_grade._percent = persistent_grade.percent_grade  # pylint: disable=protected-access
-            course_grade._letter_grade = persistent_grade.letter_grade  # pylint: disable=protected-access
-            course_grade.course_version = persistent_grade.course_version
-            course_grade.course_edited_timestamp = persistent_grade.course_edited_timestamp
-            return course_grade
+
+        course_grade = CourseGrade(user, course, course_structure)
+
+        if check_grading_policy:
+            current_grading_policy_hash = course_grade.get_grading_policy_hash(course.location, course_structure)
+            if current_grading_policy_hash != persistent_grade.grading_policy_hash:
+                return None
+
+        course_grade._percent = persistent_grade.percent_grade  # pylint: disable=protected-access
+        course_grade._letter_grade = persistent_grade.letter_grade  # pylint: disable=protected-access
+        course_grade.course_version = persistent_grade.course_version
+        course_grade.course_edited_timestamp = persistent_grade.course_edited_timestamp
+
+        course_grade._log_event(log.info, u"_load_persisted_grade")  # pylint: disable=protected-access
+        return course_grade
 
     @staticmethod
     def _calc_percent(grade_value):
