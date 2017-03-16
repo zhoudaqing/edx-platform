@@ -69,29 +69,44 @@ END
 
 }
 
+function run_paver_quality {
+    QUALITY_TASK=$1
+    shift
+    mkdir -p test_root/log/
+    LOG_PREFIX=test_root/log/$QUALITY_TASK
+    paver $QUALITY_TASK $* 2> $LOG_PREFIX.err.log > $LOG_PREFIX.out.log || {
+        echo "STDOUT:";
+        cat $LOG_PREFIX.out.log;
+        echo "STDERR:";
+        cat $LOG_PREFIX.err.log;
+        return 1;
+    }
+    return 0;
+}
+
 case "$TEST_SUITE" in
 
     "quality")
         echo "Finding fixme's and storing report..."
-        paver find_fixme > test_root/logs/fixme.log || { cat test_root/logs/fixme.log; EXIT=1; }
+        run_paver_quality find_fixme || EXIT=1
         echo "Finding pep8 violations and storing report..."
-        paver run_pep8 > test_root/logs/pep8.log || { cat test_root/logs/pep8.log; EXIT=1; }
+        run_paver_quality run_pep8 || EXIT=1
         echo "Finding pylint violations and storing in report..."
-        paver run_pylint -l $PYLINT_THRESHOLD > test_root/logs/pylint.log || { cat test_root/logs/pylint.log; EXIT=1; }
+        run_paver_quality run_pylint -l $PYLINT_THRESHOLD || EXIT=1
 
         mkdir -p reports
 
         echo "Finding ESLint violations and storing report..."
-        paver run_eslint -l $ESLINT_THRESHOLD > test_root/logs/eslint.log || { cat test_root/logs/eslint.log; EXIT=1; }
+        run_paver_quality run_eslint -l $ESLINT_THRESHOLD || EXIT=1
         echo "Running code complexity report (python)."
-        paver run_complexity || echo "Unable to calculate code complexity. Ignoring error."
+        run_paver_quality run_complexity
         echo "Running safe template linter report."
-        paver run_safelint -t $SAFELINT_THRESHOLDS > test_root/logs/safelint.log || { cat test_root/logs/safelint.log; EXIT=1; }
+        run_paver_quality run_safelint -t $SAFELINT_THRESHOLDS || EXIT=1
         echo "Running safe commit linter report."
-        paver run_safecommit_report > test_root/logs/safecommit.log || { cat test_root/logs/safecommit.log; EXIT=1; }
+        run_paver_quality run_safecommit_report || EXIT=1
         # Run quality task. Pass in the 'fail-under' percentage to diff-quality
         echo "Running diff quality."
-        paver run_quality -p 100 || EXIT=1
+        run_paver_quality run_quality -p 100 || EXIT=1
 
         # Need to create an empty test result so the post-build
         # action doesn't fail the build.
