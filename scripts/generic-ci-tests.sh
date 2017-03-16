@@ -68,26 +68,27 @@ function emptyxunit {
 END
 
 }
+
 case "$TEST_SUITE" in
 
     "quality")
         echo "Finding fixme's and storing report..."
-        paver find_fixme > fixme.log || { cat fixme.log; EXIT=1; }
+        paver find_fixme > test_root/logs/fixme.log || { cat test_root/logs/fixme.log; EXIT=1; }
         echo "Finding pep8 violations and storing report..."
-        paver run_pep8 > pep8.log || { cat pep8.log; EXIT=1; }
+        paver run_pep8 > test_root/logs/pep8.log || { cat test_root/logs/pep8.log; EXIT=1; }
         echo "Finding pylint violations and storing in report..."
-        paver run_pylint -l $PYLINT_THRESHOLD > pylint.log || { cat pylint.log; EXIT=1; }
+        paver run_pylint -l $PYLINT_THRESHOLD > test_root/logs/pylint.log || { cat test_root/logs/pylint.log; EXIT=1; }
 
         mkdir -p reports
 
         echo "Finding ESLint violations and storing report..."
-        paver run_eslint -l $ESLINT_THRESHOLD > eslint.log || { cat eslint.log; EXIT=1; }
+        paver run_eslint -l $ESLINT_THRESHOLD > test_root/logs/eslint.log || { cat test_root/logs/eslint.log; EXIT=1; }
         echo "Running code complexity report (python)."
         paver run_complexity || echo "Unable to calculate code complexity. Ignoring error."
         echo "Running safe template linter report."
-        paver run_safelint -t $SAFELINT_THRESHOLDS > safelint.log || { cat safelint.log; EXIT=1; }
+        paver run_safelint -t $SAFELINT_THRESHOLDS > test_root/logs/safelint.log || { cat test_root/logs/safelint.log; EXIT=1; }
         echo "Running safe commit linter report."
-        paver run_safecommit_report > safecommit.log || { cat safecommit.log; EXIT=1; }
+        paver run_safecommit_report > test_root/logs/safecommit.log || { cat test_root/logs/safecommit.log; EXIT=1; }
         # Run quality task. Pass in the 'fail-under' percentage to diff-quality
         echo "Running diff quality."
         paver run_quality -p 100 || EXIT=1
