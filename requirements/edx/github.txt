@@ -93,4 +93,4 @@ git+https://github.com/edx/edx-proctoring.git@0.18.0#egg=edx-proctoring==0.18.0
 
 # Third Party XBlocks
 git+https://github.com/open-craft/xblock-poll@v1.2.6#egg=xblock-poll==1.2.6
-git+https://github.com/edx-solutions/xblock-drag-and-drop-v2@325a5a720542b465354c09a3281a29eea4beffd0#egg=xblock-drag-and-drop-v2==2.0.16
+git+https://github.com/edx-solutions/xblock-drag-and-drop-v2@c29e0ba24a1d13ac58239b6fca4ce27b6ed38f3f#egg=xblock-drag-and-drop-v2==2.0.17
