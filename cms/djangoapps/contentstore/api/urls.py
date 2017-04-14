@@ -10,7 +10,7 @@ from cms.djangoapps.contentstore.api import views
 urlpatterns = patterns(
     '',
     url(
-        r'^v0/courses/{course_id}/import/$'.format(
+        r'^v0/import/{course_id}/$'.format(
             course_id=settings.COURSE_ID_PATTERN,
         ),
         views.CourseImportView.as_view(), name='course_import'

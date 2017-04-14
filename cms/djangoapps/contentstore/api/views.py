@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 
 @view_auth_classes()
-class CourseImportExportViewMixin():
+class CourseImportExportViewMixin(DeveloperErrorViewMixin):
     """
     Mixin class for course import/export related views.
     """
@@ -91,6 +91,7 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
                  error_code='user_mismatch'
              )
         try:
+            filename = request.FILES['course_data'].name
             if not filename.endswith('.tar.gz'):
                 return self.make_error_response(
                     status_code=status.HTTP_403_FORBIDDEN,
@@ -98,7 +99,6 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
                     error_code='user_mismatch'
                 )
             course_dir = path(settings.GITHUB_REPO_ROOT) / base64.urlsafe_b64encode(repr(courselike_key))
-            filename = request.FILES['course_data'].name
             temp_filepath = course_dir / filename
             if not course_dir.isdir():  # pylint: disable=no-value-for-parameter
                 os.mkdir(course_dir)
