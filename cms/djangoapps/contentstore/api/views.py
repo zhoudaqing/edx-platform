@@ -1,7 +1,16 @@
 """ API v0 views. """
+import base64
 import logging
+import os
 
+from path import Path as path
+from six import text_type
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
+
+from django.core.files import File
 from django.http import Http404
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
@@ -32,19 +41,15 @@ class CourseImportExportViewMixin(DeveloperErrorViewMixin):
         if request.user.is_anonymous():
             raise AuthenticationFailed
 
-
 class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
     """
     **Use Case**
 
-        * Get the current course grades for a user in a course.
-
-        The currently logged-in user may request her own grades, or a user with staff access to the course may request
-        any enrolled user's grades.
+        * Start an asynchronous task to import a course from a .tar.gz file into the specified course ID
 
     **Example Request**
 
-        POST /api/grades/v0/course_grade/{course_id}/users/?username={username}
+        POST /api/courses/v0/import/course-v1:edX+DemoX+Demo_Course/
 
     **POST Parameters**
 
@@ -55,7 +60,7 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
 
     **POST Response Values**
 
-        If the request for information about the course grade
+        If the import task is started successfully
         is successful, an HTTP 200 "OK" response is returned.
 
         The HTTP 200 response has the following values.
@@ -80,7 +85,7 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
             course_id (string): URI element specifying the course location.
 
         Return:
-            A JSON serialized representation of the requesting user's current grade status.
+            The UUID of the task to check status on later
         """
 
         courselike_key = CourseKey.from_string(course_id)
@@ -105,7 +110,7 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
 
             log.debug('importing course to {0}'.format(temp_filepath))
             with open(temp_filepath, "wb+") as temp_file:
-                for chunk in request.FILES['course-data'].chunks():
+                for chunk in request.FILES['course_data'].chunks():
                     temp_file.write(chunk)
 
             log.info("Course import %s: Upload complete", courselike_key)
@@ -118,7 +123,9 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
             return Response([{
                 'task_id': async_result.id
             }])
-        except e:
-            return Response([{
-                'ErrMsg': str(e)
-            }])
+        except Exception as e:
+            return self.make_error_response(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                developer_message=str(e),
+                error_code='internal_error'
+            )
