@@ -1,0 +1,93 @@
+<%!
+from django.utils.translation import ugettext as _
+%>
+<%page expression_filter="h"/>
+
+
+<div class="depth depth-1 learner-insights">
+    <br><br>
+    <div class="insights-title">
+        <h2 class="hd hd-2">
+            ${_("Learner Insights")}
+        </h2>
+    </div>
+    <div class="layout-1t2t layout">
+        <main class="layout-col layout-col-a">
+            <h3 class="hd hd-5">
+                Learner Insights Form
+            </h3>
+            <div class="insights-course-id-form">
+                <form class="form" action="/learner_insights/" method="post">
+                    <fieldset class="form-group">
+                        <div class="field">
+                            <label class="field-label">${_("Course ID")}
+                                <input class="field-input input-text" type="text" name="course_id"/>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button class="btn-brand btn-base" type="submit" name="set_course_id" value="set_course_id">${_("Submit")}</button>
+                    </div>
+
+                    <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }"/>
+                </form>
+            </div>
+            <div>
+                <h4 class="hd hd-6">Course ID:</h4>
+                % if search_course_id:
+                ${search_course_id}
+                % endif
+            </div>
+
+        </main>
+
+        <aside class="layout-col layout-col-b">
+            <h3 class="hd hd-5">
+                Learner Insights "Course ID"
+            </h3>
+            <div class="enrollment-table">
+                <table class="table">
+                    <tr>
+                        <th>Course ID</th>
+                        <td>${enrollment['course_id']}</td>
+                    </tr>
+                    <tr>
+                        <th>Enrollment Count</th>
+                        <td>${enrollment['count']}</td>
+                    </tr>
+                </table>
+            </div>
+            <br><br>
+            <div class="insights-birth-table">
+                <table class="table">
+                    <tr>
+                        <th>Birth Year</th>
+                        <th>Enrollment Count</th>
+                    </tr>
+                    % for data in enrollment_birth_year:
+                    <tr>
+                        <td>${data['birth_year']}</td>
+                        <td>${data['count']}</td>
+                    </tr>
+                    % endfor
+                </table>
+            </div>
+            <br><br>
+                <div class="insights-birth-table">
+                <table class="table">
+                    <tr>
+                        <th>Education Level</th>
+                        <th>Enrollment Count</th>
+                    </tr>
+                    % for data in enrollment_ed:
+                    <tr>
+                        <td>${data['education_level']}</td>
+                        <td>${data['count']}</td>
+                    </tr>
+                    % endfor
+                </table>
+            </div>
+            <br><br>
+        </aside>
+    </div>
+</div>

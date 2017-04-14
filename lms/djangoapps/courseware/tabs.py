@@ -111,6 +111,24 @@ class ProgressTab(EnrolledTab):
         return not course.hide_progress_tab
 
 
+# class LearnerInsightsTab(TabFragmentViewMixin, EnrolledTab):
+#     """
+#     The course Learner Insights view.
+#     """
+#     view_name = 'learner_insights'
+#     name = 'learner_insights'
+#     type = 'learner_insights'
+#     title = ugettext_noop('Learner Insights')
+#     # priority = 80
+#     # is_hideable = False
+#     # is_default = True
+#
+#     @classmethod
+#     def is_enabled(cls, course, user=None):
+#         # TODO: Properly implement this.
+#         return True
+
+
 class TextbookTabsBase(CourseTab):
     """
     Abstract class for textbook collection tabs classes.

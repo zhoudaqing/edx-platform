@@ -2024,6 +2024,9 @@ INSTALLED_APPS = (
     'discussion_api',
     'lms.djangoapps.discussion',
 
+    # learner_insights
+    'lms.djangoapps.learner_insights',
+
     # Notes
     'notes',
     'edxnotes',
