@@ -18,6 +18,7 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from user_tasks.models import UserTaskArtifact, UserTaskStatus
 
 from student.auth import has_course_author_access
 
@@ -121,8 +122,78 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
             async_result = import_olx.delay(
                 request.user.id, text_type(courselike_key), storage_path, filename, request.LANGUAGE_CODE)
             return Response([{
-                'task_id': async_result.id
+                'task_id': async_result.task_id
             }])
+        except Exception as e:
+            return self.make_error_response(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                developer_message=str(e),
+                error_code='internal_error'
+            )
+
+    """
+    **Use Case**
+
+        * Get a status on an asynchronous task import
+
+    **Example Request**
+
+        GET /api/courses/v0/import/course-v1:edX+DemoX+Demo_Course/
+
+    **GET Parameters**
+
+        A GET request may include the following parameters.
+
+        * task_id: (required) The UUID of the task to check
+
+    **GET Response Values**
+
+        If the import task is started successfully
+        is successful, an HTTP 200 "OK" response is returned.
+
+        The HTTP 200 response has the following values.
+
+        * task_id: UUID of the created task, usable for checking status
+
+
+    **Example GET Response**
+
+        [{
+            "task_id": "4b357bb3-2a1e-441d-9f6c-2210cf76606f"
+        }]
+
+    """
+    def get(self, request, course_id):
+        """
+        Check the status of the specified task
+
+        Args:
+            request (Request): Django request object.
+            course_id (string): URI element specifying the course location.
+            task_id (string): URI element specifying the course location.
+
+        Return:
+            The UUID of the task to check status on later
+        """
+
+        courselike_key = CourseKey.from_string(course_id)
+        if not has_course_author_access(request.user, courselike_key):
+             return self.make_error_response(
+                 status_code=status.HTTP_403_FORBIDDEN,
+                 developer_message='The user requested does not have the required permissions.',
+                 error_code='user_mismatch'
+             )
+        try:
+            task_id = request.GET['task_id']
+            task_status = UserTaskStatus.objects.get(task_id=task_id)
+            return Response([{
+                'state': task_status.state
+            }])
+
+            #log.debug('importing course to {0}'.format())
+
+            #log.info("Course import %s: Upload complete", courselike_key)
+
         except Exception as e:
             return self.make_error_response(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
