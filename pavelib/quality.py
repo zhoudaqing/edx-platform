@@ -52,7 +52,10 @@ def find_fixme(options):
     Run pylint on system code, only looking for fixme items.
     """
     num_fixme = 0
-    systems = getattr(options, 'system', '').split(',') or ALL_SYSTEMS
+    if 'system' in options:
+        systems = options['system'].split(',')
+    else:
+        systems = ALL_SYSTEMS
 
     for system in systems:
         # Directory to put the pylint report in.
@@ -61,21 +64,16 @@ def find_fixme(options):
 
         apps_list = ' '.join(top_python_dirs(system))
 
-        pythonpath_prefix = (
-            "PYTHONPATH={system}/djangoapps:common/djangoapps:common/lib".format(
-                system=system
-            )
-        )
-
-        sh(
-            "{pythonpath_prefix} pylint --disable all --enable=fixme "
+        cmd = (
+            "pylint --disable all --enable=fixme "
             "--output-format=parseable {apps} "
             "> {report_dir}/pylint_fixme.report".format(
-                pythonpath_prefix=pythonpath_prefix,
                 apps=apps_list,
                 report_dir=report_dir
             )
         )
+
+        sh(cmd, ignore_error=True)
 
         num_fixme += _count_pylint_violations(
             "{report_dir}/pylint_fixme.report".format(report_dir=report_dir))
@@ -99,7 +97,10 @@ def run_pylint(options):
     num_violations = 0
     violations_limit = int(getattr(options, 'limit', -1))
     errors = getattr(options, 'errors', False)
-    systems = getattr(options, 'system', '').split(',') or ALL_SYSTEMS
+    if 'system' in options:
+        systems = options['system'].split(',')
+    else:
+        systems = ALL_SYSTEMS
 
     # Make sure the metrics subdirectory exists
     Env.METRICS_DIR.makedirs_p()
@@ -115,20 +116,14 @@ def run_pylint(options):
 
         apps_list = ' '.join(top_python_dirs(system))
 
-        pythonpath_prefix = (
-            "PYTHONPATH={system}/djangoapps:common/djangoapps:common/lib".format(
-                system=system
-            )
-        )
-
         sh(
-            "{pythonpath_prefix} pylint {flags} --output-format=parseable {apps} "
+            "pylint {flags} --output-format=parseable {apps} "
             "> {report_dir}/pylint.report".format(
-                pythonpath_prefix=pythonpath_prefix,
                 flags=" ".join(flags),
                 apps=apps_list,
                 report_dir=report_dir
-            )
+            ),
+            ignore_error=True,
         )
 
         num_violations += _count_pylint_violations(
@@ -685,15 +680,9 @@ def run_quality(options):
     eslint_files = get_violations_reports("eslint")
     eslint_reports = u' '.join(eslint_files)
 
-    pythonpath_prefix = (
-        "PYTHONPATH=$PYTHONPATH:lms:lms/djangoapps:cms:cms/djangoapps:"
-        "common:common/djangoapps:common/lib"
-    )
-
     # run diff-quality for pylint.
     if not run_diff_quality(
             violations_type="pylint",
-            prefix=pythonpath_prefix,
             reports=pylint_reports,
             percentage_string=percentage_string,
             branch_string=compare_branch_string,
@@ -704,7 +693,6 @@ def run_quality(options):
     # run diff-quality for eslint.
     if not run_diff_quality(
             violations_type="eslint",
-            prefix=pythonpath_prefix,
             reports=eslint_reports,
             percentage_string=percentage_string,
             branch_string=compare_branch_string,
@@ -718,7 +706,7 @@ def run_quality(options):
 
 
 def run_diff_quality(
-        violations_type=None, prefix=None, reports=None, percentage_string=None, branch_string=None, dquality_dir=None
+        violations_type=None, reports=None, percentage_string=None, branch_string=None, dquality_dir=None
 ):
     """
     This executes the diff-quality commandline tool for the given violation type (e.g., pylint, eslint).
@@ -727,11 +715,10 @@ def run_diff_quality(
     """
     try:
         sh(
-            "{pythonpath_prefix} diff-quality --violations={type} "
+            "diff-quality --violations={type} "
             "{reports} {percentage_string} {compare_branch_string} "
             "--html-report {dquality_dir}/diff_quality_{type}.html ".format(
                 type=violations_type,
-                pythonpath_prefix=prefix,
                 reports=reports,
                 percentage_string=percentage_string,
                 compare_branch_string=branch_string,
