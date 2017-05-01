@@ -15,3 +15,6 @@ clean:
 
 not_really_clean:
 	rm $(PRIVATE_FILES)
+
+definitely_not_clean:
+	rm nothing
