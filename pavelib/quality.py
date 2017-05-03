@@ -12,13 +12,13 @@ from openedx.core.djangolib.markup import HTML
 from .utils.envs import Env
 from .utils.timer import timed
 
-ALL_SYSTEMS = [
+ALL_SYSTEMS = (
     'cms',
     'common',
     'lms',
     'openedx',
     'pavelib',
-]
+)
 
 
 def top_python_dirs(dirname):
@@ -81,29 +81,17 @@ def find_fixme(options):
     print "Number of pylint fixmes: " + str(num_fixme)
 
 
-@task
-@needs('pavelib.prereqs.install_python_prereqs')
-@cmdopts([
-    ("system=", "s", "System to act on"),
-    ("errors", "e", "Check for errors only"),
-    ("limit=", "l", "limit for number of acceptable violations"),
-])
-@timed
-def run_pylint(options):
+def _get_pylint_violations(systems=ALL_SYSTEMS, errors_only=False):
     """
-    Run pylint on system code. When violations limit is passed in,
-    fail the task if too many violations are found.
+    Runs pylint. Returns a tuple of (number_of_violations, list_of_violations)
+    where list_of_violations is a list of all pylint violations found, separated
+    by new lines.
     """
-    num_violations = 0
-    violations_limit = int(getattr(options, 'limit', -1))
-    errors = getattr(options, 'errors', False)
-    if 'system' in options:
-        systems = options['system'].split(',')
-    else:
-        systems = ALL_SYSTEMS
-
     # Make sure the metrics subdirectory exists
     Env.METRICS_DIR.makedirs_p()
+
+    num_violations = 0
+    violations_list = []
 
     for system in systems:
         # Directory to put the pylint report in.
@@ -111,7 +99,7 @@ def run_pylint(options):
         report_dir = (Env.REPORT_DIR / system).makedirs_p()
 
         flags = []
-        if errors:
+        if errors_only:
             flags.append("--errors-only")
 
         apps_list = ' '.join(top_python_dirs(system))
@@ -126,8 +114,35 @@ def run_pylint(options):
             ignore_error=True,
         )
 
-        num_violations += _count_pylint_violations(
-            "{report_dir}/pylint.report".format(report_dir=report_dir))
+        report = "{report_dir}/pylint.report".format(report_dir=report_dir)
+        num_violations += _count_pylint_violations(report)
+        with open(report) as report_contents:
+            violations_list.extend(report_contents)
+
+    # Print number of violations to log
+    return num_violations, violations_list
+
+@task
+@needs('pavelib.prereqs.install_python_prereqs')
+@cmdopts([
+    ("system=", "s", "System to act on"),
+    ("errors", "e", "Check for errors only"),
+    ("limit=", "l", "limit for number of acceptable violations"),
+])
+@timed
+def run_pylint(options):
+    """
+    Run pylint on system code. When violations limit is passed in,
+    fail the task if too many violations are found.
+    """
+    violations_limit = int(getattr(options, 'limit', -1))
+    errors = getattr(options, 'errors', False)
+    if 'system' in options:
+        systems = options['system'].split(',')
+    else:
+        systems = ALL_SYSTEMS
+
+    num_violations, violations_list = _get_pylint_violations(systems, errors)
 
     # Print number of violations to log
     violations_count_str = "Number of pylint violations: " + str(num_violations)
@@ -139,6 +154,7 @@ def run_pylint(options):
 
     # Fail number of violations is greater than the limit
     if num_violations > violations_limit > -1:
+        print "\n".join(violations_list)
         raise BuildFailure("Failed. Too many pylint violations. "
                            "The limit is {violations_limit}.".format(violations_limit=violations_limit))
 
@@ -177,22 +193,19 @@ def _get_pep8_violations():
 
     sh('pep8 . | tee {report_dir}/pep8.report -a'.format(report_dir=report_dir))
 
-    count, violations_list = _pep8_violations(
+    violations_list = _pep8_violations(
         "{report_dir}/pep8.report".format(report_dir=report_dir)
     )
 
-    return (count, violations_list)
+    return (len(violations_list), violations_list)
 
 
 def _pep8_violations(report_file):
     """
-    Returns a tuple of (num_violations, violations_list) for all
-    pep8 violations in the given report_file.
+    Returns the list of all pep8 violations in the given report_file.
     """
     with open(report_file) as f:
-        violations_list = f.readlines()
-    num_lines = len(violations_list)
-    return num_lines, violations_list
+        return f.readlines()
 
 
 @task
@@ -609,7 +622,7 @@ def run_quality(options):
     # Save the pass variable. It will be set to false later if failures are detected.
     diff_quality_percentage_pass = True
 
-    def _pep8_output(count, violations_list, is_html=False):
+    def _lint_output(linter, count, violations_list, is_html=False):
         """
         Given a count & list of pep8 violations, pretty-print the pep8 output.
         If `is_html`, will print out with HTML markup.
@@ -617,20 +630,20 @@ def run_quality(options):
         if is_html:
             lines = ['<body>\n']
             sep = '-------------<br/>\n'
-            title = "<h1>Quality Report: pep8</h1>\n"
+            title = "<h1>Quality Report: {}</h1>\n".format(linter)
             violations_bullets = ''.join(
                 [HTML('<li>{violation}</li><br/>\n').format(violation=violation) for violation in violations_list]
             )
             violations_str = HTML('<ul>\n{bullets}</ul>\n').format(bullets=HTML(violations_bullets))
             violations_count_str = "<b>Violations</b>: {count}<br/>\n"
-            fail_line = "<b>FAILURE</b>: pep8 count should be 0<br/>\n"
+            fail_line = "<b>FAILURE</b>: {} count should be 0<br/>\n".format(linter)
         else:
             lines = []
             sep = '-------------\n'
-            title = "Quality Report: pep8\n"
+            title = "Quality Report: {}\n".format(linter)
             violations_str = ''.join(violations_list)
             violations_count_str = "Violations: {count}\n"
-            fail_line = "FAILURE: pep8 count should be 0\n"
+            fail_line = "FAILURE: {} count should be 0\n".format(linter)
 
         violations_count_str = violations_count_str.format(count=count)
 
@@ -648,11 +661,11 @@ def run_quality(options):
     (count, violations_list) = _get_pep8_violations()
 
     # Print number of violations to log
-    print _pep8_output(count, violations_list)
+    print _lint_output('pep8', count, violations_list)
 
     # Also write the number of violations to a file
     with open(dquality_dir / "diff_quality_pep8.html", "w") as f:
-        f.write(_pep8_output(count, violations_list, is_html=True))
+        f.write(_lint_output('pep8', count, violations_list, is_html=True))
 
     if count > 0:
         diff_quality_percentage_pass = False
@@ -674,21 +687,20 @@ def run_quality(options):
     # If pylint reports exist, use those
     # Otherwise, `diff-quality` will call pylint itself
 
-    pylint_files = get_violations_reports("pylint")
-    pylint_reports = u' '.join(pylint_files)
+    (count, violations_list) = _get_pylint_violations()
+
+    # Print number of violations to log
+    print _lint_output('pylint', count, violations_list)
+
+    # Also write the number of violations to a file
+    with open(dquality_dir / "diff_quality_pylint.html", "w") as f:
+        f.write(_lint_output('pylint', count, violations_list, is_html=True))
+
+    if count > 0:
+        diff_quality_percentage_pass = False
 
     eslint_files = get_violations_reports("eslint")
     eslint_reports = u' '.join(eslint_files)
-
-    # run diff-quality for pylint.
-    if not run_diff_quality(
-            violations_type="pylint",
-            reports=pylint_reports,
-            percentage_string=percentage_string,
-            branch_string=compare_branch_string,
-            dquality_dir=dquality_dir
-    ):
-        diff_quality_percentage_pass = False
 
     # run diff-quality for eslint.
     if not run_diff_quality(

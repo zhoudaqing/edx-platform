@@ -56,7 +56,7 @@ class TestPaverQualityViolations(unittest.TestCase):
     def test_pep8_parser(self):
         with open(self.f.name, 'w') as f:
             f.write("hello\nhithere")
-        num, _violations = pavelib.quality._pep8_violations(f.name)  # pylint: disable=protected-access
+        num = len(pavelib.quality._pep8_violations(f.name))  # pylint: disable=protected-access
         self.assertEqual(num, 2)
 
 
@@ -69,16 +69,11 @@ class TestPaverReportViolationsCounts(unittest.TestCase):
     def setUp(self):
         super(TestPaverReportViolationsCounts, self).setUp()
 
-        # Mock the paver @needs decorator
-        self._mock_paver_needs = patch.object(pavelib.quality.run_quality, 'needs').start()
-        self._mock_paver_needs.return_value = 0
-
         # Temporary file infrastructure
         self.f = tempfile.NamedTemporaryFile(delete=False)
         self.f.close()
 
         # Cleanup various mocks and tempfiles
-        self.addCleanup(self._mock_paver_needs.stop)
         self.addCleanup(os.remove, self.f.name)
 
     def test_get_eslint_violations_count(self):
@@ -266,12 +261,9 @@ class TestPaverRunQuality(unittest.TestCase):
         paver.tasks.environment = paver.tasks.Environment()
 
         # mock the @needs decorator to skip it
-        self._mock_paver_needs = patch.object(pavelib.quality.run_quality, 'needs').start()
-        self._mock_paver_needs.return_value = 0
         patcher = patch('pavelib.quality.sh')
         self._mock_paver_sh = patcher.start()
         self.addCleanup(patcher.stop)
-        self.addCleanup(self._mock_paver_needs.stop)
 
     @patch('__builtin__.open', mock_open())
     def test_failure_on_diffquality_pep8(self):
