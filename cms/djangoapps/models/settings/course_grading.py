@@ -1,5 +1,5 @@
 from datetime import timedelta
-from xmodule.modulestore.django import modulestore
+from xmodule.modulestore.django import modulestore, SignalHandler
 
 
 class CourseGradingModel(object):
@@ -64,6 +64,11 @@ class CourseGradingModel(object):
         CourseGradingModel.update_grace_period_from_json(course_key, jsondict['grace_period'], user)
 
         CourseGradingModel.update_minimum_grade_credit_from_json(course_key, jsondict['minimum_grade_credit'], user)
+        # Fire Grade Policy Change Signal
+        SignalHandler.grading_policy_change.send(
+            sender=CourseGradingModel,
+            course_key=course_key
+        )
 
         return CourseGradingModel.fetch(course_key)
 
@@ -85,6 +90,11 @@ class CourseGradingModel(object):
             descriptor.raw_grader.append(grader)
 
         modulestore().update_item(descriptor, user.id)
+
+        SignalHandler.grading_policy_change.send(
+            sender=CourseGradingModel,
+            course_key=course_key
+        )
 
         return CourseGradingModel.jsonize_grader(index, descriptor.raw_grader[index])
 
