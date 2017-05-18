@@ -24,7 +24,7 @@ __test__ = False  # do not collect
     'pavelib.utils.test.utils.clean_reports_dir',
 )
 @cmdopts([
-    ("system=", "s", "System to act on"),
+    ("system=", "s", "system to act on"),
     ("test-id=", "t", "Test id"),
     ("fail-fast", "x", "Fail suite on first failed test"),
     ("fasttest", "a", "Run without collectstatic"),
