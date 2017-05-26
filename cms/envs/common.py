@@ -469,6 +469,10 @@ MODULESTORE = {
                         'default_class': 'xmodule.hidden_module.HiddenDescriptor',
                         'fs_root': DATA_DIR,
                         'render_template': 'edxmako.shortcuts.render_to_string',
+                        'runtime_services': {
+                            'library_tools': 'xmodule.library_tools.LibraryToolsService',
+                            'partitions': 'xmodule.partitions.partitions_service.PartitionService'
+                         }
                     }
                 },
                 {
@@ -479,6 +483,10 @@ MODULESTORE = {
                         'default_class': 'xmodule.hidden_module.HiddenDescriptor',
                         'fs_root': DATA_DIR,
                         'render_template': 'edxmako.shortcuts.render_to_string',
+                        'runtime_services': {
+                            'library_tools': 'xmodule.library_tools.LibraryToolsService',
+                            'partitions': 'xmodule.partitions.partitions_service.PartitionService'
+                         }
                     }
                 }
             ]

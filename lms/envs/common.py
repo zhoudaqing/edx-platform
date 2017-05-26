@@ -7,7 +7,7 @@ FEATURES[...]. Modules that extend this one can change the feature
 configuration in an environment specific config file and re-calculate those
 values.
 
-We should make a method that calls all these config methods so that you just
+We should make a method that calls all these config methods so that you justz
 make one call at the end of your site-specific dev file to reset all the
 dependent variables (like INSTALLED_APPS) for you.
 
@@ -768,6 +768,10 @@ MODULESTORE = {
                         'default_class': 'xmodule.hidden_module.HiddenDescriptor',
                         'fs_root': DATA_DIR,
                         'render_template': 'edxmako.shortcuts.render_to_string',
+                        'runtime_services': {
+                            'library_tools': 'xmodule.library_tools.LibraryToolsService',
+                            'partitions': 'xmodule.partitions.partitions_service.PartitionService'
+                         }
                     }
                 },
                 {
@@ -778,6 +782,10 @@ MODULESTORE = {
                         'default_class': 'xmodule.hidden_module.HiddenDescriptor',
                         'fs_root': DATA_DIR,
                         'render_template': 'edxmako.shortcuts.render_to_string',
+                        'runtime_services': {
+                            'library_tools': 'xmodule.library_tools.LibraryToolsService',
+                            'partitions': 'xmodule.partitions.partitions_service.PartitionService'
+                         }
                     }
                 }
             ]
