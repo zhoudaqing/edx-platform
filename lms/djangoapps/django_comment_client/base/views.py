@@ -95,9 +95,13 @@ def track_created_event(request, event_name, course, obj, data):
     track_forum_event(request, event_name, course, obj, data)
 
 
-def add_truncated_title_to_event_data(event_data, full_title):
-    event_data['title_truncated'] = (len(full_title) > TRACKING_MAX_FORUM_TITLE)
-    event_data['title'] = full_title[:TRACKING_MAX_FORUM_TITLE]
+def add_truncated_title_to_event_data(event_data, full_title): # pylint: disable=invalid-name
+    if full_title is not None:
+        event_data['title_truncated'] = (len(full_title) > TRACKING_MAX_FORUM_TITLE)
+        event_data['title'] = full_title[:TRACKING_MAX_FORUM_TITLE]
+    else:
+        event_data['title_truncated'] = False
+        event_data['title'] = None
 
 
 def track_thread_created_event(request, course, thread, followed):
@@ -154,6 +158,20 @@ def track_voted_event(request, course, obj, vote_value, undo_vote=False):
         'vote_value': vote_value,
     }
     track_forum_event(request, event_name, course, obj, event_data)
+
+
+def track_thread_viewed_event(request, course, thread):
+    """
+    Send analytics event for a viewed thread.
+    """
+    event_name = _EVENT_NAME_TEMPLATE.format(obj_type='thread', action_name='viewed')
+    event_data = {
+        'commentable_id': thread.commentable_id,
+        'team_id': None, # @@TODO What should go here?
+        'target_username': thread.username,
+    }
+    add_truncated_title_to_event_data(event_data, thread.title)
+    track_forum_event(request, event_name, course, thread, event_data)
 
 
 def permitted(func):

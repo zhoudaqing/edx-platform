@@ -43,6 +43,7 @@ from django_comment_client.utils import (
     strip_none
 )
 from django_comment_common.utils import ThreadContext, get_course_discussion_settings, set_course_discussion_settings
+from django_comment_client.base.views import track_thread_viewed_event
 from lms.djangoapps.courseware.views.views import check_and_get_upgrade_link, get_cosmetic_verified_display_price
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from student.models import CourseEnrollment
@@ -308,6 +309,7 @@ def single_thread(request, course_key, discussion_id, thread_id):
         with newrelic_function_trace("add_courseware_context"):
             add_courseware_context([content], course, request.user)
 
+        track_thread_viewed_event(request, course, thread)
         return utils.JsonResponse({
             'content': content,
             'annotated_content_info': annotated_content_info,
@@ -404,26 +406,28 @@ def _create_discussion_board_context(request, course_key, discussion_id=None, th
 
         # Since we're in page render mode, and the discussions UI will request the thread list itself,
         # we need only return the thread information for this one.
-        threads = [thread.to_dict()]
+        thread_dicts = [thread.to_dict()]
 
-        for thread in threads:
+        for thread_dict in thread_dicts:
             # patch for backward compatibility with comments service
-            if "pinned" not in thread:
-                thread["pinned"] = False
+            if "pinned" not in thread_dict:
+                thread_dict["pinned"] = False
         thread_pages = 1
         root_url = reverse('forum_form_discussion', args=[unicode(course.id)])
+
+        track_thread_viewed_event(request, course, thread)
     else:
-        threads, query_params = get_threads(request, course, user_info)   # This might process a search query
+        thread_dicts, query_params = get_threads(request, course, user_info)   # This might process a search query
         thread_pages = query_params['num_pages']
         root_url = request.path
     is_staff = has_permission(user, 'openclose_thread', course.id)
-    threads = [utils.prepare_content(thread, course_key, is_staff) for thread in threads]
+    thread_dicts = [utils.prepare_content(thread_dict, course_key, is_staff) for thread_dict in thread_dicts]
 
     with newrelic_function_trace("get_metadata_for_threads"):
-        annotated_content_info = utils.get_metadata_for_threads(course_key, threads, user, user_info)
+        annotated_content_info = utils.get_metadata_for_threads(course_key, thread_dicts, user, user_info)
 
     with newrelic_function_trace("add_courseware_context"):
-        add_courseware_context(threads, course, user)
+        add_courseware_context(thread_dicts, course, user)
 
     with newrelic_function_trace("get_cohort_info"):
         course_discussion_settings = get_course_discussion_settings(course_key)
@@ -433,7 +437,7 @@ def _create_discussion_board_context(request, course_key, discussion_id=None, th
         'root_url': root_url,
         'discussion_id': discussion_id,
         'thread_id': thread_id,
-        'threads': threads,
+        'threads': thread_dicts,
         'thread_pages': thread_pages,
         'annotated_content_info': annotated_content_info,
         'is_moderator': has_permission(user, "see_all_cohorts", course_key),
