@@ -16,7 +16,36 @@ from django.http import Http404, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.utils.translation import get_language_bidi
+<<<<<<< HEAD
 from django.views.decorators.http import require_GET
+=======
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_GET, require_http_methods
+from django_comment_client.constants import TYPE_ENTRY
+from django_comment_client.permissions import get_team, has_permission
+from django_comment_client.utils import (
+    add_courseware_context,
+    available_division_schemes,
+    course_discussion_division_enabled,
+    extract,
+    get_group_id_for_comments_service,
+    get_group_id_for_user,
+    get_group_names_by_id,
+    is_commentable_divided,
+    merge_dict,
+    strip_none
+)
+from django_comment_common.utils import ThreadContext, get_course_discussion_settings, set_course_discussion_settings
+from lms.djangoapps.courseware.views.views import check_and_get_upgrade_link, get_cosmetic_verified_display_price
+
+from opaque_keys.edx.keys import CourseKey
+from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
+from rest_framework import status
+from student.models import CourseEnrollment
+from util.json_request import JsonResponse, expect_json
+from web_fragments.fragment import Fragment
+from xmodule.modulestore.django import modulestore
+>>>>>>> fdafd53a66... Upsell Courses in Courseware, CourseOutline, Discussions, Progress
 
 log = logging.getLogger("edx.discussions")
 try:
@@ -440,6 +469,8 @@ def _create_discussion_board_context(request, course_key, discussion_id=None, th
         'category_map': course_settings["category_map"],
         'course_settings': course_settings,
         'is_commentable_divided': is_commentable_divided(course_key, discussion_id)
+        'upgrade_link': check_and_get_upgrade_link(request, user, course.id),
+        'upgrade_price': get_cosmetic_verified_display_price(course),
     })
     return context
 
