@@ -17,6 +17,7 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.utils.translation import get_language_bidi
 from django.views.decorators.http import require_GET
+from lms.djangoapps.courseware.views.views import check_and_get_upgrade_link, get_cosmetic_verified_display_price
 
 log = logging.getLogger("edx.discussions")
 try:
@@ -439,7 +440,9 @@ def _create_discussion_board_context(request, course_key, discussion_id=None, th
         'sort_preference': cc_user.default_sort_key,
         'category_map': course_settings["category_map"],
         'course_settings': course_settings,
-        'is_commentable_divided': is_commentable_divided(course_key, discussion_id)
+        'is_commentable_divided': is_commentable_divided(course_key, discussion_id),
+        'upgrade_link': check_and_get_upgrade_link(request, user, course.id),
+        'upgrade_price': get_cosmetic_verified_display_price(course),
     })
     return context
 
