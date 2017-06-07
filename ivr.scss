@@ -1,0 +1,71 @@
+$copy-width: 60%;
+$image-width: 40%;
+
+.upgrade-button {
+    button {
+        background-image: none;
+        background-color: #009b00;
+        border-color: #009b00;
+        color: white;
+        outline: none;
+        transition: background-color 0.5s;
+        display: inline-block;
+        font-weight: 600;
+
+        &:hover {
+            background-color: white;
+            color: #009b00;
+            background-image: none;
+            border-color: #009b00;
+        }
+    }
+}
+
+.verification-hero {
+    .copy {
+        float: left;
+        width: $copy-width;
+
+        .title {
+            font-weight: bold;
+        }
+    }
+    .certificate-image {
+        float: left;
+        width: $image-width;
+
+        img {
+            width: 300px;
+            height: 200px;
+        }
+    }
+    .upgrade-button {
+        width: $copy-width;
+    }
+}
+
+.verification-sock,
+.verification-sidekick {
+    .copy, .upgrade-button {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .copy {
+        width: $copy-width;
+
+        .title {
+            font-weight: bold;
+        }
+    }
+
+    .upgrade-button {
+    }
+}
+
+.verification-sock-outer {
+    position: fixed;
+    bottom: 0;
+    border: 1px solid red;
+    width: 100%;
+}
