@@ -1,0 +1,52 @@
+.profile-wrapper .course-info>.chapters {
+    border-top: 0;
+}
+
+.upgrade-button button {
+  background-image: none;
+  background-color: #009b00;
+  border-color: #009b00;
+  color: white;
+  outline: none;
+  text-align: center;
+  transition: background-color 0.5s;
+  display: inline-block;
+  font-weight: 900;
+}
+.upgrade-button button:hover {
+  background-color: #027902;
+  background-image: none;
+  border-color: #027902;
+  box-shadow: none;
+}
+
+.verification-hero {
+  background: azure;
+}
+.verification-hero .copy {
+  width: 50%;
+  color: green;
+  display: table-cell;
+  padding: 1em;
+}
+.verification-hero .copy .title {
+  font-size: 20px;
+  font-weight: bold;
+  text-indent: 20px;
+  vertical-align: middle;
+}
+.verification-hero .certificate-and-button {
+  width: 50%;
+  display: table-cell;
+  text-align: center;
+}
+.verification-hero .certificate-image {
+  padding: .5em;
+}
+.verification-hero .certificate-image img {
+  width: 300px;
+  height: 200px;
+}
+.verification-hero .upgrade-button {
+  padding-bottom: .5em;
+}

@@ -1,6 +1,10 @@
 $copy-width: 60%;
 $image-width: 40%;
 
+.profile-wrapper .course-info>.chapters {
+    border-top: 0px;
+}
+
 .upgrade-button {
     button {
         background-image: none;
@@ -22,25 +26,32 @@ $image-width: 40%;
 }
 
 .verification-hero {
+    padding: 1.5em;
+    background: azure;
+
     .copy {
-        float: left;
+        display: table-cell;
         width: $copy-width;
 
         .title {
             font-weight: bold;
+            font-size: 20px;
+            text-indent: 20px;
+            color: green;
         }
     }
-    .certificate-image {
-        float: left;
+    .certificate-and-button {
         width: $image-width;
-
+        display: table-cell;
+    }
+    .certificate-image {
         img {
             width: 300px;
             height: 200px;
         }
     }
     .upgrade-button {
-        width: $copy-width;
+        text-align: center;
     }
 }
 
