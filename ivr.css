@@ -20,9 +20,15 @@
   box-shadow: none;
 }
 
-.verification-hero {
+.verification-hero-wrapper {
   background: azure;
   margin: 1em;
+}
+
+.verification-hero-toggle-wrapper {
+  text-align: right;
+  padding-right: 1.5em;
+  padding-top: 0.5em;
 }
 .verification-hero .copy-and-button {
   width: 50%;
@@ -89,10 +95,8 @@
   width: 100%;
   text-align: center;
 }
-.verification-sock-contents {
-  /* to allow centering of the inner contents */
-  display: inline-block;
-}
+
+.verification-sidekick .copy,
 .verification-sock .copy {
   width: 50%;
   color: black;
@@ -100,26 +104,33 @@
   padding: 1em;
   vertical-align: middle;
 }
+
+.verification-sidekick .copy .title,
 .verification-sock .copy .title {
   font-size: 20px;
   font-weight: 600;
   text-indent: 20px;
 }
-.verification-sock .copy ul {
-  line-height: 2;
-}
+
+.verification-sidekick .certificate-image,
 .verification-sock .certificate-image {
   width: 50%;
   display: table-cell;
 }
+
+.verification-sidekick .certificate-image img,
 .verification-sock .certificate-image img {
   width: 130px;
   height: 94px;
 }
+
+.verification-sidekick .upgrade-button,
 .verification-sock .upgrade-button {
   padding-top: .7em;
   text-align: center;
 }
+
+.verification-sidekick .upgrade-button .btn,
 .verification-sock .upgrade-button .btn {
   padding: .3em;
 }

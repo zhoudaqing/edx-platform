@@ -3,55 +3,118 @@
   <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="ivr_nim.css">
+    <link rel="stylesheet" type="text/css" href="ivr.css">
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    <script>
+      $(function () {
+        var STATUS_KEY = 'ret.verificationHeroExpanded',
+          MORE_TOGGLE_TEXT = 'Learn more',
+          LESS_TOGGLE_TEXT = 'Show less',
+          $verificationHeroOuter = $('.verification-hero-wrapper'),
+          $verificationHero = $verificationHeroOuter.find('.verification-hero'),
+          $verificationSidekick = $verificationHeroOuter.find('.verification-sidekick'),
+          $toggle = $verificationHeroOuter.find('.verification-hero-toggle');
+
+        // Hide the hero if the user previously hid it
+        if (localStorage.getItem(STATUS_KEY) === 'false') {
+          $verificationHero.hide();
+          $verificationSidekick.show();
+          $toggle.attr('aria-expanded', false);
+          $toggle.text(MORE_TOGGLE_TEXT);
+        }
+
+        $verificationHeroOuter.fadeIn('slow');
+
+        function toggleHeroExpansion() {
+          var expanded = $toggle.attr('aria-expanded') === 'true';
+
+          if (expanded) {
+            // Collapse the hero, and bring in the sidekick
+            $verificationHero.slideToggle('slow', function () {
+              $toggle.attr('aria-expanded', !expanded);
+              $verificationSidekick.toggle(100);
+              $toggle.text(MORE_TOGGLE_TEXT);
+            });
+          }
+          else {
+            // Collapse the sidekick, and call in the big guy!
+            $verificationSidekick.toggle(100, function () {
+              $verificationHero.slideToggle('slow', function () {
+                $toggle.attr('aria-expanded', !expanded);
+                $toggle.text(LESS_TOGGLE_TEXT);
+              });
+            });
+          }
+
+          localStorage.setItem(STATUS_KEY, !expanded);
+        }
+
+        $toggle.click(function () {
+          // TODO Fire Optimizely event
+          toggleHeroExpansion();
+        });
+      });
+    </script>
   </head>
   <body style="width: 800px; margin: 0 auto;">
 
     <h2>Hero</h2>
-    <section>
-        <div class="verification-hero">
-            <div class="copy-and-button">
-                <div class="copy">
-                    <div class="title">Pursue a verified certificate</div>
-                    <ul>
-                    <li>Official proof of completion</li>
-                    <li>Easily shareable certificate</li>
-                    <li>Proven motivator to complete the course</li>
-                    <li>Certificate purchases help edX continue to offer free courses
-                    </li>
-                    </ul>
-                </div>
-                    <div class="upgrade-button">
-                      <a class="btn btn-brand upgrade-link">
-                        Upgrade Now
-                      </a>
-                    </div>
-                  </a>
-            </div>
-            <div class="certificate-image"></div>
-        </div>
-  </section>
-
-      <div class="verification-sock">
-          <div class="copy">
-                <div class="title">Pursue a verified certificate</div>
-                <a class="upgrade-link">
-                  <div class="upgrade-button">
-                    <button class="btn btn-brand">
-                      Upgrade Now
-                    </button>
-                  </div>
-                </a>
-          </div>
-          <div class="certificate-image">
-            <img src="ivr-certificate-hero.png" alt="Certificate example"/>
-          </div>
+    <div class="verification-hero-wrapper" style="display:none;">
+      <div class="verification-hero-toggle-wrapper">
+        <a class="verification-hero-toggle" href="#" aria-expanded="true">Show less</a>
       </div>
+      <div class="verification-hero">
+        <div class="copy-and-button">
+          <div class="copy">
+            <div class="title">Pursue a verified certificate</div>
+            <ul>
+              <li>Official proof of completion</li>
+              <li>Easily shareable certificate</li>
+              <li>Proven motivator to complete the course</li>
+              <li>Certificate purchases help edX continue to offer free courses
+              </li>
+            </ul>
+          </div>
+          <div class="upgrade-button">
+            <a class="btn btn-brand upgrade-link">
+              Upgrade Now
+            </a>
+          </div>
+        </div>
+        <div class="certificate-image">
+          <img src="ivr-certificate-hero.png" alt="Certificate example"/>
+        </div>
+      </div>
+      <div class="verification-sidekick" style="display:none">
+        <div class="copy">
+          <div class="title">Pursue a verified certificate</div>
+          <a class="upgrade-link">
+            <div class="upgrade-button">
+              <button class="btn btn-brand">Upgrade Now</button>
+            </div>
+          </a>
+        </div>
+        <div class="certificate-image">
+          <img src="ivr-certificate-hero.png" alt="Certificate example"/>
+        </div>
+      </div>
+    </div>
 
-
-
-
-
-
+    <div class="verification-sock">
+      <div class="copy">
+        <div class="title">Pursue a verified certificate</div>
+        <a class="upgrade-link">
+          <div class="upgrade-button">
+            <button class="btn btn-brand">Upgrade Now</button>
+          </div>
+        </a>
+      </div>
+      <div class="certificate-image">
+        <img src="ivr-certificate-hero.png" alt="Certificate example"/>
+      </div>
+    </div>
   </body>
 </html>
