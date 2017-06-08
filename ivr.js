@@ -50,7 +50,6 @@ $(function () {
   }
 
   $toggle.click(function () {
-    // TODO Fire Optimizely event
     toggleHeroExpansion();
   });
 });
