@@ -22,18 +22,22 @@
 
 .verification-hero {
   background: azure;
+  margin: 1em;
 }
 .verification-hero .copy {
   width: 50%;
   color: green;
   display: table-cell;
   padding: 1em;
+  vertical-align: middle;
 }
 .verification-hero .copy .title {
   font-size: 20px;
   font-weight: bold;
   text-indent: 20px;
-  vertical-align: middle;
+}
+.verification-hero .copy ul {
+  line-height: 2;
 }
 .verification-hero .certificate-and-button {
   width: 50%;
