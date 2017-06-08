@@ -54,3 +54,35 @@
 .verification-hero .upgrade-button {
   padding-bottom: .5em;
 }
+
+
+.verification-sock {
+  background: azure;
+}
+.verification-sock .copy {
+  width: 50%;
+  color: green;
+  display: table-cell;
+  padding: 1em;
+  vertical-align: middle;
+}
+.verification-sock .copy .title {
+  font-size: 15px;
+  font-weight: bold;
+  text-indent: 20px;
+}
+.verification-sock .copy ul {
+  line-height: 2;
+}
+.verification-sock .certificate-image {
+  width: 50%;
+  display: table-cell;
+}
+.verification-sock .certificate-image img {
+  width: 150px;
+  height: 100px;
+}
+.verification-sock .upgrade-button {
+  padding-top: 1.5em;
+  text-align: center;
+}
