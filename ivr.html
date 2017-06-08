@@ -8,56 +8,7 @@
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
       crossorigin="anonymous"></script>
-    <script>
-      $(function () {
-        var STATUS_KEY = 'ret.verificationHeroExpanded',
-          MORE_TOGGLE_TEXT = 'Learn more',
-          LESS_TOGGLE_TEXT = 'Show less',
-          $verificationHeroOuter = $('.verification-hero-wrapper'),
-          $verificationHero = $verificationHeroOuter.find('.verification-hero'),
-          $verificationSidekick = $verificationHeroOuter.find('.verification-sidekick'),
-          $toggle = $verificationHeroOuter.find('.verification-hero-toggle');
-
-        // Hide the hero if the user previously hid it
-        if (localStorage.getItem(STATUS_KEY) === 'false') {
-          $verificationHero.hide();
-          $verificationSidekick.show();
-          $toggle.attr('aria-expanded', false);
-          $toggle.text(MORE_TOGGLE_TEXT);
-        }
-
-        $verificationHeroOuter.fadeIn('slow');
-
-        function toggleHeroExpansion() {
-          var expanded = $toggle.attr('aria-expanded') === 'true';
-
-          if (expanded) {
-            // Collapse the hero, and bring in the sidekick
-            $verificationHero.slideToggle('slow', function () {
-              $toggle.attr('aria-expanded', !expanded);
-              $verificationSidekick.toggle(100);
-              $toggle.text(MORE_TOGGLE_TEXT);
-            });
-          }
-          else {
-            // Collapse the sidekick, and call in the big guy!
-            $verificationSidekick.toggle(100, function () {
-              $verificationHero.slideToggle('slow', function () {
-                $toggle.attr('aria-expanded', !expanded);
-                $toggle.text(LESS_TOGGLE_TEXT);
-              });
-            });
-          }
-
-          localStorage.setItem(STATUS_KEY, !expanded);
-        }
-
-        $toggle.click(function () {
-          // TODO Fire Optimizely event
-          toggleHeroExpansion();
-        });
-      });
-    </script>
+    <script src="ivr.js"></script>
   </head>
   <body style="width: 800px; margin: 0 auto;">
 
@@ -79,38 +30,37 @@
             </ul>
           </div>
           <div class="upgrade-button">
-            <a class="btn btn-brand upgrade-link">
+            <a class="btn btn-brand upgrade-link" href="#">
               Upgrade Now
             </a>
           </div>
         </div>
         <div class="certificate-image">
-          <img src="ivr-certificate-hero.png" alt="Certificate example"/>
+          <img src="http://cdn.optimizely.com/img/1706490390/e5dd19a0b8f2485ea6a6164bbee6fc94.png" alt="Certificate example"/>
         </div>
       </div>
       <div class="verification-sidekick" style="display:none">
-        <div class="copy">
-          <div class="title">Pursue a verified certificate</div>
-          <a class="upgrade-link">
-            <div class="upgrade-button">
-              <button class="btn btn-brand">Upgrade Now</button>
-            </div>
+        <div class="certificate-image">
+          <img src="https://courses.edx.org/static/images/edx-verified-mini-cert.png" alt="Certificate example"/>
+        </div>
+        <div class="title">Pursue a verified certificate</div>
+        <div class="upgrade-button">
+          <a class="btn btn-brand upgrade-link" href="#">
+            Upgrade Now
           </a>
         </div>
-        <div class="certificate-image">
-          <img src="ivr-certificate-hero.png" alt="Certificate example"/>
-        </div>
+        <div style="clear:both"></div>
       </div>
     </div>
 
     <div class="verification-sock">
       <div class="copy">
         <div class="title">Pursue a verified certificate</div>
-        <a class="upgrade-link">
-          <div class="upgrade-button">
-            <button class="btn btn-brand">Upgrade Now</button>
-          </div>
-        </a>
+        <div class="upgrade-button">
+          <a class="btn btn-brand upgrade-link">
+            Upgrade Now
+          </a>
+        </div>
       </div>
       <div class="certificate-image">
         <img src="ivr-certificate-hero.png" alt="Certificate example"/>
