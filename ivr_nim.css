@@ -24,9 +24,9 @@
   background: azure;
   margin: 1em;
 }
-.verification-hero .copy {
+.verification-hero .copy-and-button {
   width: 50%;
-  color: green;
+  color: black;
   display: table-cell;
   padding: 1em;
   vertical-align: middle;
@@ -39,25 +39,27 @@
 .verification-hero .copy ul {
   line-height: 2;
 }
-.verification-hero .certificate-and-button {
+.verification-hero .certificate-image {
+  padding: .5em;
   width: 50%;
   display: table-cell;
   text-align: center;
 }
-.verification-hero .certificate-image {
-  padding: .5em;
-}
 .verification-hero .certificate-image img {
-  width: 300px;
-  height: 200px;
+  width: 337px;
+  height: 225px;
 }
 .verification-hero .upgrade-button {
   padding-bottom: .5em;
+  padding-left: 1.2em;
 }
 
 
+
+
+
 .verification-sock {
-  background: azure;
+  background: #cce3f0;
 
   /* floater footer that stays fixed on the bottom of the page. */
   position: fixed;
@@ -76,7 +78,7 @@
 }
 .verification-sock .copy {
   width: 50%;
-  color: green;
+  color: #0075b4;
   display: table-cell;
   padding: 1em;
   vertical-align: middle;
@@ -98,7 +100,7 @@
   height: 100px;
 }
 .verification-sock .upgrade-button {
-  padding-top: 1.5em;
+  padding-top: .7em;
   text-align: center;
 }
 .verification-sock .upgrade-button .btn {
@@ -109,4 +111,3 @@
   /* to leave room for the floating footer. */
   margin-bottom: 100px;
 }
-
