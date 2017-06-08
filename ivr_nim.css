@@ -58,6 +58,21 @@
 
 .verification-sock {
   background: azure;
+
+  /* floater footer that stays fixed on the bottom of the page. */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+
+  /* to center the inner contents */
+  width: 100%;
+  text-align: center;
+}
+.verification-sock-contents {
+  /* to allow centering of the inner contents */
+  display: inline-block;
 }
 .verification-sock .copy {
   width: 50%;
@@ -86,3 +101,12 @@
   padding-top: 1.5em;
   text-align: center;
 }
+.verification-sock .upgrade-button .btn {
+  padding: .3em;
+}
+
+.wrapper-footer footer#footer-openedx {
+  /* to leave room for the floating footer. */
+  margin-bottom: 100px;
+}
+
