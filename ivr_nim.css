@@ -2,7 +2,7 @@
     border-top: 0;
 }
 
-.upgrade-button button {
+.upgrade-button .btn {
   background-image: none;
   background-color: #009b00;
   border-color: #009b00;
@@ -13,7 +13,7 @@
   display: inline-block;
   font-weight: 900;
 }
-.upgrade-button button:hover {
+.upgrade-button .btn:hover {
   background-color: #027902;
   background-image: none;
   border-color: #027902;
@@ -49,17 +49,34 @@
   width: 337px;
   height: 225px;
 }
-.verification-hero .upgrade-button {
+.verification-hero .copy-and-button .upgrade-button {
   padding-bottom: .5em;
   padding-left: 1.2em;
 }
 
 
 
-
+/* FOR SOCK */
+.upgrade-button .btn {
+  background-image: none;
+  background-color: #009b00;
+  border-color: #009b00;
+  color: white;
+  outline: none;
+  text-align: center;
+  transition: background-color 0.5s;
+  display: inline-block;
+  font-weight: 900;
+}
+.upgrade-button .btn:hover {
+  background-color: #027902;
+  background-image: none;
+  border-color: #027902;
+  box-shadow: none;
+}
 
 .verification-sock {
-  background: #cce3f0;
+  background: azure;
 
   /* floater footer that stays fixed on the bottom of the page. */
   position: fixed;
@@ -78,14 +95,14 @@
 }
 .verification-sock .copy {
   width: 50%;
-  color: #0075b4;
+  color: black;
   display: table-cell;
   padding: 1em;
   vertical-align: middle;
 }
 .verification-sock .copy .title {
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 600;
   text-indent: 20px;
 }
 .verification-sock .copy ul {
