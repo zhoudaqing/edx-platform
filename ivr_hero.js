@@ -63,7 +63,12 @@ utils.waitForElement(selector).then(function(container) {
     $verificationHero.hide();
     $verificationSidekick.show();
     $toggle.attr('aria-expanded', false);
-    $toddle.remove();
+    $toggle.remove();
+  }
+  else {
+    $verificationHero.show();
+    $verificationSidekick.hide();
+    $toggle.attr('aria-expanded', true);
   }
 
   $verificationHeroOuter.show();

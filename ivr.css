@@ -91,6 +91,8 @@
 
 .verification-sidekick {
   padding: 0.5em;
+  display: table;
+  width: 100%;
 }
 
 .verification-sidekick .certificate-image,
@@ -99,17 +101,23 @@
   display: table-cell;
   vertical-align: middle;
   margin-right: 2em;
-  width: 25%;
+}
+
+.verification-sidekick .certificate-image {
+  width: 15%;
 }
 
 .verification-sidekick .upgrade-button {
+  width: 25%;
   text-align: right;
 }
 
 .verification-sidekick .title {
+  width: 50%;
   font-size: 1.35em;
   font-weight: 400;
   color: black;
+  text-align: center;
 }
 
 .verification-sidekick .certificate-image img {
