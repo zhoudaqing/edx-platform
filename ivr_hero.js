@@ -10,7 +10,7 @@ utils.waitForElement(selector).then(function(container) {
     return;
   }
   content = ' \
-      <div class="verification-hero-wrapper" style="display:none;"> \
+    <div class="verification-hero-wrapper" style="display:none;"> \
       <div class="verification-hero-toggle-wrapper"> \
         <a class="verification-hero-toggle" href="#" aria-expanded="true">Show less</a> \
       </div> \
@@ -71,7 +71,7 @@ utils.waitForElement(selector).then(function(container) {
     $toggleWrapper.remove();
   }
 
-  $verificationHeroOuter.fadeIn('slow');
+  $verificationHeroOuter.show();
 
   function toggleHeroExpansion() {
     window.optimizely.push(['trackEvent', 'toggle_hero']);
@@ -80,9 +80,8 @@ utils.waitForElement(selector).then(function(container) {
 
     if (expanded) {
       // Collapse the hero, and bring in the sidekick
-      $verificationHero.slideToggle('slow', function () {
+      $verificationHero.add($verificationSidekick).slideToggle('slow', function () {
         $toggle.attr('aria-expanded', !expanded);
-        $verificationSidekick.toggle(100);
         $toggleWrapper.remove();
       });
     }
