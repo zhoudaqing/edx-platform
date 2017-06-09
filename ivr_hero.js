@@ -7,7 +7,7 @@ selector = '#course-info-progress .chapters,.info-wrapper,main.course-outline,.v
 utils.waitForElement(selector).then(function(container) {
   var upgradeUser = document.getElementById('upgrade_user');
   if (upgradeUser === null) {
-    return
+    return;
   }
   content = ' \
       <div class="verification-hero-wrapper" style="display:none;"> \
