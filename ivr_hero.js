@@ -10,14 +10,14 @@ utils.waitForElement(selector).then(function(container) {
     return;
   }
   content = ' \
-    <div class="verification-hero-wrapper" style="display:none;"> \
+    <div class="verification-hero-wrapper" style="display:none;" role="region" aria-label="Upgrade to Verified"> \
       <div class="verification-hero-toggle-wrapper"> \
         <a class="verification-hero-toggle" href="#" aria-expanded="true">Show less</a> \
       </div> \
       <div class="verification-hero"> \
         <div class="copy-and-button"> \
           <div class="copy"> \
-            <div class="title">Pursue a verified certificate</div> \
+            <h2 class="title">Pursue a verified certificate</h2> \
             <ul> \
               <li>Official proof of completion</li> \
               <li>Easily shareable certificate</li> \
@@ -33,14 +33,14 @@ utils.waitForElement(selector).then(function(container) {
           </div> \
         </div> \
         <div class="certificate-image"> \
-          <img src="https://www.edx.org/sites/default/files/professional-certficate-example-universityx-500x342.png?0002" alt="Certificate example"/> \
+          <img src="https://www.edx.org/sites/default/files/verified-certificate-example-universityx-500x342.png" alt="Certificate example"/> \
         </div> \
       </div> \
       <div class="verification-sidekick" style="display:none"> \
         <div class="certificate-image"> \
           <img src="https://courses.edx.org/static/images/edx-verified-mini-cert.png" alt="Certificate example"/> \
         </div> \
-        <div class="title">Pursue a verified certificate</div> \
+        <h2 class="title">Pursue a verified certificate</h2> \
         <div class="upgrade-button"> \
           <a class="btn btn-brand upgrade-link" href="{addToCartUrl}"> \
             Upgrade Now ({price}) \
