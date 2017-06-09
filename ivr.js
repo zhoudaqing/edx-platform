@@ -1,8 +1,13 @@
 // Retrieve the utils library
 var utils = window.optimizely.get('utils');
 
+var selector = ''
+if (window.location.pathname.endsWith('/progress')) {
+  selector = '#course-info-progress .chapters'
+}
+
 // Wait for the upgrade link element to appear in the DOM, then change the color
-utils.waitForElement('#course-info-progress .chapters').then(function(container) {
+utils.waitForElement(selector).then(function(container) {
   var upgradeUser = document.getElementById('upgrade_user');
   content = ' \
       <div class="verification-hero-wrapper" style="display:none;"> \
