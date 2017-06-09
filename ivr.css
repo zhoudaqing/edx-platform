@@ -113,6 +113,10 @@
   /* to center the inner contents */
   width: 100%;
   text-align: center;
+
+  /* a little padding */
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .verification-sock-inner {
@@ -153,7 +157,12 @@
   padding: .3em;
 }
 
+#footer-edx-v3 {
+  /* to leave room for the floating footer. */
+  margin-bottom: 114px;
+}
+
 .wrapper-footer footer#footer-openedx {
   /* to leave room for the floating footer. */
-  margin-bottom: 94px;
+  margin-bottom: 114px;
 }
