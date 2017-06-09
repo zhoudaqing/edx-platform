@@ -141,6 +141,11 @@
   text-indent: 20px;
 }
 
+.verification-sock .copy .title h2 {
+  margin-bottom: 0;
+  color: black;
+}
+
 .verification-sock .certificate-image {
   width: 50%;
   display: table-cell;
