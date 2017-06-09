@@ -103,24 +103,6 @@
 }
 
 /* FOR SOCK */
-.upgrade-button .btn {
-  background-image: none;
-  background-color: #009b00;
-  border-color: #009b00;
-  color: white;
-  outline: none;
-  text-align: center;
-  transition: background-color 0.5s;
-  display: inline-block;
-  font-weight: 900;
-}
-
-.upgrade-button .btn:hover {
-  background-color: #027902;
-  background-image: none;
-  border-color: #027902;
-  box-shadow: none;
-}
 
 .verification-sock {
   background: azure;
