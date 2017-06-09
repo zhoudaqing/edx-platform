@@ -30,12 +30,25 @@
   background: azure;
   margin: 1em !important;
   line-height: normal;
+  position: relative;
 }
 
-.verification-hero-toggle-wrapper {
-  text-align: right;
-  padding-right: 1.5em;
-  padding-top: 0.5em;
+.verification-hero-toggle {
+  position: absolute;
+  right: 1.5em;
+  top: 0.5em;
+}
+
+.discussion-body .verification-hero .copy-and-button {
+  font-size: 85%;
+}
+
+.discussion-body .verification-hero .copy-and-button .btn {
+  font-size: 100%;
+}
+
+.discussion-body .verification-hero .copy ul {
+  padding-bottom: 20px;
 }
 
 .verification-hero .copy-and-button {
@@ -47,7 +60,6 @@
 }
 
 .verification-hero .copy .title {
-  font-size: 20px;
   font-weight: bold;
   text-indent: 20px;
   color: black;

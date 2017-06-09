@@ -11,9 +11,7 @@ utils.waitForElement(selector).then(function(container) {
   }
   content = ' \
     <div class="verification-hero-wrapper" style="display:none;" role="region" aria-label="Upgrade to Verified"> \
-      <div class="verification-hero-toggle-wrapper"> \
-        <a class="verification-hero-toggle" href="#" aria-expanded="true">Show less</a> \
-      </div> \
+      <a class="verification-hero-toggle" href="#" aria-expanded="true">Show less</a> \
       <div class="verification-hero"> \
         <div class="copy-and-button"> \
           <div class="copy"> \
@@ -58,15 +56,14 @@ utils.waitForElement(selector).then(function(container) {
     $verificationHeroOuter = $('.verification-hero-wrapper'),
     $verificationHero = $verificationHeroOuter.find('.verification-hero'),
     $verificationSidekick = $verificationHeroOuter.find('.verification-sidekick'),
-    $toggleWrapper = $verificationHeroOuter.find('.verification-hero-toggle-wrapper'),
-    $toggle = $toggleWrapper.find('.verification-hero-toggle');
+    $toggle = $verificationHeroOuter.find('.verification-hero-toggle');
 
   // Hide the hero if the user previously hid it
   if (localStorage.getItem(STATUS_KEY) === 'false') {
     $verificationHero.hide();
     $verificationSidekick.show();
     $toggle.attr('aria-expanded', false);
-    $toggleWrapper.remove();
+    $toddle.remove();
   }
 
   $verificationHeroOuter.show();
@@ -80,7 +77,7 @@ utils.waitForElement(selector).then(function(container) {
       // Collapse the hero, and bring in the sidekick
       $verificationHero.add($verificationSidekick).slideToggle('slow', function () {
         $toggle.attr('aria-expanded', !expanded);
-        $toggleWrapper.remove();
+        $toggle.remove();
       });
     }
     else {
