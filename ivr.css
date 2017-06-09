@@ -78,7 +78,11 @@
 }
 
 .verification-hero .certificate-image img {
-  width: 95%;
+  width: 80%;
+}
+
+.profile-wrapper .verification-hero .certificate-image img {
+  width: 65%;
 }
 
 .verification-hero .copy-and-button .upgrade-button {
