@@ -4,6 +4,9 @@ var utils = window.optimizely.get('utils');
 // Wait for the upgrade link element to appear in the DOM, then change the color
 utils.waitForElement("footer").then(function(container) {
   var upgradeUser = document.getElementById('upgrade_user');
+  if (upgradeUser === null) {
+    return;
+  }
   $(container).before(' \
     <div class="verification-sock"> \
       <div class="verification-sock-inner"> \
