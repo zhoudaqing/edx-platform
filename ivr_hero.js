@@ -6,6 +6,8 @@ if (window.location.pathname.endsWith('/progress')) {
   selector = '#course-info-progress .chapters';
 } else if (window.location.pathname.endsWith('/info')) {
   selector = '.info-wrapper';
+} else if (window.location.pathname.endsWith('/course/')) {
+  selector = '#main';
 }
 
 if (selector !== '') {
