@@ -62,11 +62,11 @@
   width: 50%;
   display: table-cell;
   text-align: center;
+  vertical-align: middle;
 }
 
 .verification-hero .certificate-image img {
-  width: 337px;
-  height: 225px;
+  width: 95%;
 }
 
 .verification-hero .copy-and-button .upgrade-button {

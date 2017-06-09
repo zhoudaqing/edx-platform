@@ -45,7 +45,6 @@ utils.waitForElement(selector).then(function(container) {
             Upgrade Now ({price}) \
           </a> \
         </div> \
-        <div style="clear:both"></div> \
       </div> \
     </div>'.replace(/{addToCartUrl}/g, upgradeUser.dataset.link).replace(/{price}/g, upgradeUser.dataset.price);
 
