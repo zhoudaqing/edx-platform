@@ -11,7 +11,7 @@ utils.waitForElement("footer").then(function(container) {
     <div class="verification-sock" role="region" aria-label="Upgrade to Verified"> \
       <div class="verification-sock-inner"> \
         <div class="copy"> \
-            <h2 class="title">Pursue a verified certificate</h2> \
+            <h2 class="title">Pursue a Verified Certificate</h2> \
             <div class="upgrade-button"> \
               <a class="btn btn-brand upgrade-link" href="{addToCartUrl}"> \
                 Upgrade Now ({price}) \
