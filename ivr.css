@@ -50,6 +50,7 @@
   font-size: 20px;
   font-weight: bold;
   text-indent: 20px;
+  color: black;
 }
 
 .verification-hero .copy ul {
@@ -92,6 +93,7 @@
 .verification-sidekick .title {
   font-size: 1.35em;
   font-weight: 400;
+  color: black;
 }
 
 .verification-sidekick .certificate-image img {
