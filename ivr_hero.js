@@ -8,6 +8,8 @@ if (window.location.pathname.endsWith('/progress')) {
   selector = '.info-wrapper';
 } else if (window.location.pathname.endsWith('/course/')) {
   selector = '#main';
+} else if (window.location.pathname.endsWith('discussion/forum/')) {
+  selector = '.view-discussion-home';
 }
 
 if (selector !== '') {
@@ -55,9 +57,7 @@ if (selector !== '') {
         </div> \
       </div>'.replace(/{addToCartUrl}/g, upgradeUser.dataset.link).replace(/{price}/g, upgradeUser.dataset.price);
     container.innerHTML = content + container.innerHTML;
-  });
 
-  $(function () {
     var STATUS_KEY = 'ret.verificationHeroExpanded',
       $verificationHeroOuter = $('.verification-hero-wrapper'),
       $verificationHero = $verificationHeroOuter.find('.verification-hero'),
