@@ -21,4 +21,8 @@ utils.waitForElement("footer").then(function(container) {
         </div> \
     </div>'.replace(/{addToCartUrl}/g, upgradeUser.dataset.link).replace(/{price}/g, upgradeUser.dataset.price)
   );
+
+  $('.upgrade-link').click(function(event) {
+    window.optimizely.push(['trackEvent', 'upgrade_banner']);
+  });
 });

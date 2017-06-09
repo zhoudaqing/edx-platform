@@ -49,6 +49,10 @@ utils.waitForElement(selector).then(function(container) {
 
   $(container).prepend(content);
 
+  $('.upgrade-link').click(function(event) {
+    window.optimizely.push(['trackEvent', 'upgrade_banner']);
+  });
+
   var STATUS_KEY = 'ret.verificationHeroExpanded',
     $verificationHeroOuter = $('.verification-hero-wrapper'),
     $verificationHero = $verificationHeroOuter.find('.verification-hero'),
