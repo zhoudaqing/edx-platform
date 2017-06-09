@@ -29,6 +29,7 @@
 .verification-hero-wrapper {
   background: azure;
   margin: 1em !important;
+  line-height: normal;
 }
 
 .verification-hero-toggle-wrapper {
