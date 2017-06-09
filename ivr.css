@@ -117,8 +117,8 @@
   text-align: center;
 
   /* a little padding */
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 7px;
+  padding-bottom: 2px;
 }
 
 .verification-sock-inner {
@@ -130,12 +130,13 @@
   width: 50%;
   color: black;
   display: table-cell;
-  padding: 1em;
-  vertical-align: middle;
+  padding-left: 1em;
+  padding-right: 1em;
+  vertical-align: top;
 }
 
 .verification-sock .copy .title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   text-indent: 20px;
 }
@@ -146,8 +147,7 @@
 }
 
 .verification-sock .certificate-image img {
-  width: 130px;
-  height: 94px;
+  height: 68px;
 }
 
 .verification-sock .upgrade-button {
@@ -157,14 +157,15 @@
 
 .verification-sock .upgrade-button .btn {
   padding: .3em;
+  font-size: 14px;
 }
 
 #footer-edx-v3 {
   /* to leave room for the floating footer. */
-  margin-bottom: 114px;
+  margin-bottom: 82px;
 }
 
 .wrapper-footer footer#footer-openedx {
   /* to leave room for the floating footer. */
-  margin-bottom: 114px;
+  margin-bottom: 82px;
 }
