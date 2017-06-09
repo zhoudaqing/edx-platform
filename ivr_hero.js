@@ -71,6 +71,8 @@ utils.waitForElement(selector).then(function(container) {
   $verificationHeroOuter.fadeIn('slow');
 
   function toggleHeroExpansion() {
+    window.optimizely.push(['trackEvent', 'toggle_hero']);
+
     var expanded = $toggle.attr('aria-expanded') === 'true';
 
     if (expanded) {
