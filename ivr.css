@@ -108,7 +108,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 114px;
+
+  /* lms home page has a different line-height than the other pages, this normalizes it*/
+  line-height: normal;
 
   /* to center the inner contents */
   width: 100%;
