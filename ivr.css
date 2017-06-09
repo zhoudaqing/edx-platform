@@ -68,7 +68,6 @@
 }
 
 .verification-hero .copy-and-button .upgrade-button {
-  padding-bottom: .5em;
   padding-left: 1.2em;
 }
 
@@ -136,6 +135,11 @@
   /* to center the inner contents */
   width: 100%;
   text-align: center;
+}
+
+.verification-sock-inner {
+  /* to center the inner contents */
+  display: inline-block;
 }
 
 .verification-sock .copy {
