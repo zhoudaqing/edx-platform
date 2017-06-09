@@ -17,13 +17,12 @@ utils.waitForElement(selector).then(function(container) {
       <div class="verification-hero"> \
         <div class="copy-and-button"> \
           <div class="copy"> \
-            <h2 class="title">Pursue a verified certificate</h2> \
+            <h2 class="title">Pursue a Verified Certificate</h2> \
             <ul> \
-              <li>Official proof of completion</li> \
-              <li>Easily shareable certificate</li> \
-              <li>Proven motivator to complete the course</li> \
-              <li>Certificate purchases help edX continue to offer free courses \
-              </li> \
+              <li>Receive an official, instructor-signed certificate</li> \
+              <li>Share on your resume and LinkedIn profile</li> \
+              <li>Motivate yourself to complete the course</li> \
+              <li>Support our nonprofit mission to provide high quality education to everyone, everywhere</li> \
             </ul> \
           </div> \
           <div class="upgrade-button"> \
