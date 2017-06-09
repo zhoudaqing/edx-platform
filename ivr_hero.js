@@ -6,6 +6,9 @@ selector = '#course-info-progress .chapters,.info-wrapper,main.course-outline,.v
 // Wait for the upgrade link element to appear in the DOM, then change the color
 utils.waitForElement(selector).then(function(container) {
   var upgradeUser = document.getElementById('upgrade_user');
+  if (upgradeUser === null) {
+    return
+  }
   content = ' \
       <div class="verification-hero-wrapper" style="display:none;"> \
       <div class="verification-hero-toggle-wrapper"> \
