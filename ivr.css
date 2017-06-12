@@ -166,6 +166,8 @@
   font-size: 16px;
   font-weight: 600;
   text-indent: 20px;
+  color: black;
+  margin: 0;
 }
 
 .verification-sock .copy .title h2 {
