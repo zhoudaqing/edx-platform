@@ -92,6 +92,7 @@
 .verification-sidekick {
   padding: 0.5em;
   display: table;
+  width: 98%;
 }
 
 .verification-sidekick .certificate-image,
