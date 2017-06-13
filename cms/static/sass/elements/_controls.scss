@@ -90,17 +90,17 @@
   color: $white;
 
   &:hover, &:active {
-    background: $uxpl-green-hover-active;
-    border-color: $uxpl-green-hover-active;
+    background: $uxpl-green-dark-hover-active;
+    border-color: $uxpl-green-dark-hover-active;
   }
 
   &.current, &.active {
-    background: $uxpl-green-hover-active;
+    background: $uxpl-green-dark-hover-active;
     color: $white;
-    border-color: $uxpl-green-hover-active;
+    border-color: $uxpl-green-dark-hover-active;
 
     &:hover, &:active {
-      background: $uxpl-green-hover-active;
+      background: $uxpl-green-dark-hover-active;
     }
   }
 }
