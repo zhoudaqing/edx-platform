@@ -1,0 +1,39 @@
+## mako
+
+<%page expression_filter="h"/>
+
+<%namespace name='static' file='../static_content.html'/>
+
+<%!
+from django.utils.translation import ugettext as _
+
+from openedx.features.course_experience import course_home_page_title
+%>
+
+
+<div class="course-reviews container" tabindex="-1">
+    <header class="page-header has-secondary">
+        ## Breadcrumb navigation
+        <div class="page-header-main">
+            <nav aria-label="${_('Course Reviews')}" class="sr-is-focusable" tabindex="-1">
+                <div class="has-breadcrumbs">
+                    <div class="breadcrumbs">
+                        <span class="nav-item">
+                            <a href="${course_url}">${course_home_page_title(course)}</a>
+                        </span>
+                        <span class="icon fa fa-angle-right" aria-hidden="true"></span>
+                        <span class="nav-item">${_('Course Reviews')}</span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="coursetalk-read-reviews">
+        ## Coursetalk Widget
+        <!--<div id="ct-custom-read-review-widget" data-provider="${platform_key}" data-course="${course_review_key}"></div>-->
+        <div id="ct-custom-read-review-widget" data-provider="my_best_platform" data-course="my_best_platform_my_best_course"></div>
+    </div>
+</div>
+
+<!--TODO: load this file using webpack-->
+<script src="//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-read-reviews.js"></script>
