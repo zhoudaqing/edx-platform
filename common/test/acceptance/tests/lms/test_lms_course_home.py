@@ -7,7 +7,7 @@ from nose.plugins.attrib import attr
 
 from ...fixtures.course import CourseFixture, XBlockFixtureDesc
 from ...pages.lms.bookmarks import BookmarksPage
-from ...pages.lms.course_home import CourseHomePage, CourseSearchResultsPage
+from ...pages.lms.course_home import CourseHomePage, CourseReviewsPage
 from ...pages.lms.courseware import CoursewarePage
 from ..helpers import UniqueCourseTest, auto_auth, load_data_str
 
@@ -124,7 +124,8 @@ class CourseHomeTest(CourseHomeBaseTest):
 @attr('a11y')
 class CourseHomeA11yTest(CourseHomeBaseTest):
     """
-    Tests the accessibility of the course home page with course outline.
+    Tests the accessibility of the course home page with course outline
+    and pages that are accessed directly from links on the page
     """
 
     def test_course_home_a11y(self):
@@ -143,3 +144,11 @@ class CourseHomeA11yTest(CourseHomeBaseTest):
         course_home_page.visit()
         course_search_results_page = course_home_page.search_for_term("Test Search")
         course_search_results_page.a11y_audit.check_for_accessibility_errors()
+
+    def test_course_reviews_a11y(self):
+        """
+        Test the accessibility of the course reviews page.
+        """
+        course_reviews_page = CourseReviewsPage(self.browser, self.course_id)
+        course_reviews_page.visit()
+        course_reviews_page.a11y_audit.check_for_accessibility_errors()
