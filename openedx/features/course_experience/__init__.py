@@ -3,6 +3,7 @@ Unified course experience settings and helper methods.
 """
 import waffle
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from openedx.core.djangoapps.waffle_utils import CourseWaffleFlag, WaffleFlagNamespace
