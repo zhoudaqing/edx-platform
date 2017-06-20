@@ -252,18 +252,3 @@ class CourseSearchResultsPage(CoursePage):
     @property
     def search_results(self):
         return self.q(css='.search-results-item')
-
-
-class CourseReviewsPage(CoursePage):
-    """
-    Course reviews page
-    """
-
-    url_path = 'course/reviews'
-
-    def is_browser_on_page(self):
-        return self.q(css='.coursetalk-read-reviews > .ct-custom-read-review-widget').present
-
-    def __init__(self, browser, course_id):
-        super(CourseReviewsPage, self).__init__(browser, course_id)
-        self.course_id = course_id
