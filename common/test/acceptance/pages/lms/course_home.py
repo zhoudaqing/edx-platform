@@ -253,6 +253,7 @@ class CourseSearchResultsPage(CoursePage):
     def search_results(self):
         return self.q(css='.search-results-item')
 
+
 class CourseReviewsPage(CoursePage):
     """
     Course reviews page

@@ -16,7 +16,8 @@ def get_coursetalk_course_key(course_key):
     :return: CourseTalk course key
     :rtype: str
     """
-    return '{0.org}_{0.course}'.format(course_key)
+
+    return '{0.CANONICAL_NAMESPACE}:{0.org}+{0.course}+{0.run}'.format(course_key)
 
 
 def inject_coursetalk_keys_into_context(context, course_key):

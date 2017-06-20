@@ -125,7 +125,7 @@ class CourseHomeTest(CourseHomeBaseTest):
 class CourseHomeA11yTest(CourseHomeBaseTest):
     """
     Tests the accessibility of the course home page with course outline
-    and pages that are accessed directly from links on the page
+    and pages that are accessed directly from the course tools sidebar.
     """
 
     def test_course_home_a11y(self):

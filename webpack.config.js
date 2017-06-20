@@ -134,7 +134,7 @@ var wpconfig = {
         logger: 'Logger',
         underscore: '_',
         URI: 'URI',
-        coursetalk: 'CourseTalk',
+        coursetalk: 'CourseTalk'
     },
 
     watchOptions: {
