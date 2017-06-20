@@ -10,6 +10,8 @@ from ...pages.lms.bookmarks import BookmarksPage
 from ...pages.lms.course_home import CourseHomePage, CourseReviewsPage
 from ...pages.lms.courseware import CoursewarePage
 from ..helpers import UniqueCourseTest, auto_auth, load_data_str
+from openedx.core.djangoapps.waffle_utils.testutils import override_waffle_flag
+from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG
 
 
 class CourseHomeBaseTest(UniqueCourseTest):
@@ -145,6 +147,7 @@ class CourseHomeA11yTest(CourseHomeBaseTest):
         course_search_results_page = course_home_page.search_for_term("Test Search")
         course_search_results_page.a11y_audit.check_for_accessibility_errors()
 
+    @override_waffle_flag(UNIFIED_COURSE_TAB_FLAG, active=True)
     def test_course_reviews_a11y(self):
         """
         Test the accessibility of the course reviews page.

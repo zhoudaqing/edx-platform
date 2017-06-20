@@ -36,7 +36,7 @@ class CourseTalkKeyTests(test.TestCase):
 
     def test_simple_key(self):
         coursetalk_course_key = helpers.get_coursetalk_course_key(self.course_key)
-        self.assertEqual(coursetalk_course_key, 'org_course')
+        self.assertEqual(coursetalk_course_key, 'course-v1:org+course+run')
 
     def test_inject_coursetalk_keys_when_widget_not_enabled(self):
         self.db_set_up(False)
@@ -53,4 +53,4 @@ class CourseTalkKeyTests(test.TestCase):
         self.assertIn('course_review_key', self.context)
         self.assertEqual(self.context.get('show_coursetalk_widget'), True)
         self.assertEqual(self.context.get('platform_key'), self.PLATFORM_KEY)
-        self.assertEqual(self.context.get('course_review_key'), 'org_course')
+        self.assertEqual(self.context.get('course_review_key'), 'course-v1:org+course+run')
