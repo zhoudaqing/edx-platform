@@ -124,8 +124,7 @@ class CourseHomeTest(CourseHomeBaseTest):
 @attr('a11y')
 class CourseHomeA11yTest(CourseHomeBaseTest):
     """
-    Tests the accessibility of the course home page with course outline
-    and pages that are accessed directly from the course tools sidebar.
+    Tests the accessibility of the course home page
     """
 
     def test_course_home_a11y(self):
