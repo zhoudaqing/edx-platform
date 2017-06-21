@@ -31,96 +31,10 @@ define(['js/views/baseview', 'js/views/utils/xblock_utils', 'js/views/modals/cou
             loadAccessEditor: function(event) {
                 event.preventDefault();
                 var modal = CourseOutlineModalsFactory.getModal('edit', this.model, {
-                    onSave: this.refresh.bind(this),
                     parentInfo: this.parentInfo,
-                    xblockType: 'vertical'
                 });
                 if (modal) {
                     modal.show();
-                }
-
-            },
-
-            getLabel: function() {
-                return this.$('.xblock-field-value');
-            },
-
-            getInput: function() {
-                return this.$('.xblock-field-input');
-            },
-
-            onInputFocusLost: function() {
-                var currentValue = this.model.get(this.fieldName);
-                if (currentValue === this.getInput().val()) {
-                    this.hideInput();
-                }
-            },
-
-            onClickSubmit: function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.updateField();
-            },
-
-            onClickCancel: function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.cancelInput();
-            },
-
-            onClickEditor: function(event) {
-                event.stopPropagation();
-            },
-
-            onChangeField: function() {
-                var value = this.model.get(this.fieldName);
-                this.getLabel().text(value);
-                this.getInput().val(value);
-                this.hideInput();
-            },
-
-            showInput: function(event) {
-                var input = this.getInput();
-                event.preventDefault();
-                event.stopPropagation();
-                this.$el.addClass('is-editing');
-                input.focus().select();
-            },
-
-            hideInput: function() {
-                this.$el.removeClass('is-editing');
-            },
-
-            cancelInput: function() {
-                this.getInput().val(this.model.get(this.fieldName));
-                this.hideInput();
-            },
-
-            /**
-             * Refresh the model from the server so that it gets the latest publish and last modified information.
-             */
-            refresh: function() {
-                this.model.fetch();
-            },
-
-            updateField: function() {
-                var self = this,
-                    xblockInfo = this.model,
-                    newValue = this.getInput().val().trim(),
-                    oldValue = xblockInfo.get(this.fieldName);
-                // TODO: generalize this as not all xblock fields want to disallow empty strings...
-                if (newValue === '' || newValue === oldValue) {
-                    this.cancelInput();
-                    return;
-                }
-                return XBlockViewUtils.updateXBlockField(xblockInfo, this.fieldName, newValue).done(function() {
-                    self.refresh();
-                });
-            },
-
-            handleKeyUp: function(event) {
-                if (event.keyCode === 27) {   // Revert the changes if the user hits escape
-                    this.cancelInput();
                 }
             }
         });
