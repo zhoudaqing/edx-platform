@@ -1,11 +1,16 @@
 """
 Tests for the views
 """
+import ddt
+import os
+import shutil
+import tarfile
+import tempfile
 from datetime import datetime
 from urllib import urlencode
 
-import ddt
 from django.core.urlresolvers import reverse
+from path import Path as path
 from mock import patch
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -40,7 +45,34 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
         cls.staff = StaffFactory(course_key=cls.course.id, password=cls.password)
         cls.global_staff = GlobalStaffFactory.create()
 
+        cls.content_dir = path(tempfile.mkdtemp())
+
+        def touch(name):
+            """ Equivalent to shell's 'touch'"""
+            with file(name, 'a'):
+                os.utime(name, None)
+
+        # Create tar test files -----------------------------------------------
+        # OK course:
+        good_dir = tempfile.mkdtemp(dir=cls.content_dir)
+        # test course being deeper down than top of tar file
+        embedded_dir = os.path.join(good_dir, "grandparent", "parent")
+        os.makedirs(os.path.join(embedded_dir, "course"))
+        with open(os.path.join(embedded_dir, "course.xml"), "w+") as f:
+            f.write('<course url_name="2013_Spring" org="EDx" course="0.00x"/>')
+
+        with open(os.path.join(embedded_dir, "course", "2013_Spring.xml"), "w+") as f:
+            f.write('<course></course>')
+
+        cls.good_tar = os.path.join(cls.content_dir, "good.tar.gz")
+        with tarfile.open(cls.good_tar, "w:gz") as gtar:
+            gtar.add(good_dir)
+
         cls.namespaced_url = 'courses_api:course_import'
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.content_dir)
 
     def setUp(self):
         super(CourseImportViewTest, self).setUp()
@@ -77,11 +109,12 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
 
     def test_staff_has_access(self):
         """
-        Test that an staff user can access the API
+        Test that an staff user can access the API and successfully upload a course
         """
         self.client.login(username=self.staff.username, password=self.password)
-        resp = self.client.post(self.get_url())
-        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        with open(self.good_tar, 'rb') as fp:
+            resp = self.client.post(self.get_url(), {'course_data': fp}, format='multipart')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_staff_has_no_access(self):
         """
