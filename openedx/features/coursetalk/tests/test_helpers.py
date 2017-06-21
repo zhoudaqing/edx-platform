@@ -4,9 +4,8 @@ from __future__ import unicode_literals
 from django import test
 
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
-from openedx.core.djangoapps.coursetalk import helpers
-from openedx.core.djangoapps.coursetalk import models
 from openedx.core.djangolib.testing.utils import skip_unless_lms
+from openedx.features.coursetalk import helpers, models
 
 
 @skip_unless_lms

@@ -3,7 +3,7 @@ CourseTalk widget helpers
 """
 from __future__ import unicode_literals
 
-from openedx.core.djangoapps.coursetalk import models
+from openedx.features.coursetalk import models
 
 
 def get_coursetalk_course_key(course_key):
@@ -16,8 +16,7 @@ def get_coursetalk_course_key(course_key):
     :return: CourseTalk course key
     :rtype: str
     """
-
-    return '{0.CANONICAL_NAMESPACE}:{0.org}+{0.course}+{0.run}'.format(course_key)
+    return course_key.to_deprecated_string()
 
 
 def inject_coursetalk_keys_into_context(context, course_key):

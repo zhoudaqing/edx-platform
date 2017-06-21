@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from django_comment_client.permissions import has_permission
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.djangolib.markup import HTML
-from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG
+from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG, SHOW_REVIEWS_TOOL
 %>
 
 <%block name="content">
@@ -75,17 +75,19 @@ from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG
                                 ${_("Bookmarks")}
                             </a>
                         </li>
+                        % if SHOW_REVIEWS_TOOL.is_enabled(course.id):
+                            <li>
+                                <a href="${reverse('openedx.course_experience.course_reviews', args=[course.id])}">
+                                    <span class="icon fa fa-star" aria-hidden="true"></span>
+                                    ${_("Reviews")}
+                                </a>
+                            </li>
+                        % endif
                         % if UNIFIED_COURSE_TAB_FLAG.is_enabled(course.id):
                             <li>
                                 <a href="${reverse('openedx.course_experience.course_updates', args=[course.id])}">
                                     <span class="icon fa fa-newspaper-o" aria-hidden="true"></span>
                                     ${_("Updates")}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="${reverse('openedx.course_experience.course_reviews', args=[course.id])}">
-                                    <span class="icon fa fa-star" aria-hidden="true"></span>
-                                    ${_("Reviews")}
                                 </a>
                             </li>
                         % endif

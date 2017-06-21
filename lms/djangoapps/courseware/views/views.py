@@ -73,7 +73,6 @@ from lms.djangoapps.instructor.views.api import require_global_staff
 from lms.djangoapps.verify_student.models import SoftwareSecurePhotoVerification
 from openedx.core.djangoapps.catalog.utils import get_programs, get_programs_with_type
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from openedx.core.djangoapps.coursetalk.helpers import inject_coursetalk_keys_into_context
 from openedx.core.djangoapps.credit.api import (
     get_credit_requirement_status,
     is_credit_course,
@@ -85,8 +84,9 @@ from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from openedx.core.djangoapps.programs.utils import ProgramMarketingDataExtender
 from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG, UNIFIED_COURSE_VIEW_FLAG, course_home_url_name
+from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG, course_home_url_name
 from openedx.features.course_experience.views.course_dates import CourseDatesFragmentView
+from openedx.features.coursetalk.helpers import inject_coursetalk_keys_into_context
 from openedx.features.enterprise_support.api import data_sharing_consent_required
 from shoppingcart.utils import is_shopping_cart_enabled
 from student.models import CourseEnrollment, UserTestGroup

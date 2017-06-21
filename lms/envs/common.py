@@ -300,6 +300,9 @@ FEATURES = {
     # Dashboard search feature
     'ENABLE_DASHBOARD_SEARCH': False,
 
+    # Course Reviews Provider Template, set to None to remove reviews from a course
+    'COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME': 'coursetalk-reviews-fragment.html',
+
     # log all information from cybersource callbacks
     'LOG_POSTPAY_CALLBACKS': True,
 
@@ -2172,9 +2175,6 @@ INSTALLED_APPS = (
     # Static i18n support
     'statici18n',
 
-    # Review widgets
-    'openedx.core.djangoapps.coursetalk',
-
     # API access administration
     'openedx.core.djangoapps.api_admin',
 
@@ -2216,6 +2216,7 @@ INSTALLED_APPS = (
     'openedx.features.course_bookmarks',
     'openedx.features.course_experience',
     'openedx.features.course_search',
+    'openedx.features.coursetalk',
     'openedx.features.enterprise_support',
 
     'experiments',

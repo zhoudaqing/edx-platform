@@ -16,6 +16,10 @@
 .course-sidebar {
   @include margin-left(0);
   @include padding-left($baseline);
+
+  .section-tools li:not(:first-child) {
+    margin-top: ($baseline / 5);
+  }
 }
 
 // Course outline

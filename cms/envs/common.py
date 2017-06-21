@@ -897,7 +897,6 @@ INSTALLED_APPS = (
     'openedx.core.djangoapps.external_auth',
     'student',  # misleading name due to sharing with lms
     'openedx.core.djangoapps.course_groups',  # not used in cms (yet), but tests run
-    'openedx.core.djangoapps.coursetalk',  # not used in cms (yet), but tests run
     'xblock_config',
 
     # Maintenance tools
@@ -981,6 +980,9 @@ INSTALLED_APPS = (
 
     # Video module configs (This will be moved to Video once it becomes an XBlock)
     'openedx.core.djangoapps.video_config',
+
+    # Features
+    'openedx.features.coursetalk',  # not used in cms (yet), but tests run
 
     # django-oauth2-provider (deprecated)
     'provider',
