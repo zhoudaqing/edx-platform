@@ -44,13 +44,13 @@ class CourseReviewsFragmentView(EdxFragmentView):
         """
         Fragment to render the course reviews fragment. The provider
         of the reviews can be set in the configuration file under the
-        variable COURSE_REVIEWS_PROVIDER_TEMPLATE. This setting points 
+        variable COURSE_REVIEWS_PROVIDER_TEMPLATE. This setting points
         directly to the particular sub-fragment that should be used.
-        
+
         For example, to use CourseTalk as a provider, one would set:
-        settings.FEATURES.get('COURSE_REVIEWS_PROVIDER_TEMPLATE') 
+        settings.FEATURES.get('COURSE_REVIEWS_PROVIDER_TEMPLATE')
             = 'coursetalk-reviews-fragment.html'
-            
+
         """
 
         course_key = CourseKey.from_string(course_id)
@@ -60,10 +60,10 @@ class CourseReviewsFragmentView(EdxFragmentView):
 
         # Create the fragment
         course_reviews_provider_fragment = CourseReviewsModuleFragmentView().render_to_fragment(
-                request,
-                course=course,
-                **kwargs
-            )
+            request,
+            course=course,
+            **kwargs
+        )
 
         context = {
             'course': course,
@@ -77,7 +77,7 @@ class CourseReviewsFragmentView(EdxFragmentView):
 
 class CourseReviewsModuleFragmentView(EdxFragmentView):
     """
-    A fragment to display the course reviews module as specified by 
+    A fragment to display the course reviews module as specified by
     the configured template.
     """
 

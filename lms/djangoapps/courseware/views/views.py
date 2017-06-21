@@ -688,7 +688,7 @@ class EnrollStaffView(View):
 @ensure_valid_course_key
 @cache_if_anonymous()
 def course_about(request, course_id):
-    """ 
+    """
     Display the course's about page.
     """
     course_key = CourseKey.from_string(course_id)
@@ -735,7 +735,7 @@ def course_about(request, course_id):
             if request.user.is_authenticated():
                 cart = shoppingcart.models.Order.get_cart_for_user(request.user)
                 in_cart = shoppingcart.models.PaidCourseRegistration.contained_in_order(cart, course_key) or \
-                          shoppingcart.models.CourseRegCodeItem.contained_in_order(cart, course_key)
+                    shoppingcart.models.CourseRegCodeItem.contained_in_order(cart, course_key)
 
             reg_then_add_to_cart_link = "{reg_url}?course_id={course_id}&enrollment_action=add_to_cart".format(
                 reg_url=reverse('register_user'), course_id=urllib.quote(str(course_id))
@@ -752,7 +752,7 @@ def course_about(request, course_id):
         is_professional_mode = CourseMode.PROFESSIONAL in modes or CourseMode.NO_ID_PROFESSIONAL_MODE in modes
         if ecommerce_checkout and is_professional_mode:
             professional_mode = modes.get(CourseMode.PROFESSIONAL, '') or \
-                                modes.get(CourseMode.NO_ID_PROFESSIONAL_MODE, '')
+                modes.get(CourseMode.NO_ID_PROFESSIONAL_MODE, '')
             if professional_mode.sku:
                 ecommerce_checkout_link = ecomm_service.get_checkout_page_url(professional_mode.sku)
             if professional_mode.bulk_sku:
