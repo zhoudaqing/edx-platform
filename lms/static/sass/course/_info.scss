@@ -295,6 +295,14 @@ div.info-wrapper {
 
     a {
       color: $link-color;
+      display: block;
+      margin-top: 10px;
+      font-size: 16px;
+
+      span {
+        width: 20px;
+        text-align: center;
+      }
     }
 
     &:after {
