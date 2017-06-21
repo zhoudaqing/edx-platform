@@ -51,19 +51,21 @@ class _BaseTask(PersistOnFailureTask, LoggedTask):  # pylint: disable=abstract-m
     abstract = True
 
 
-@task(base=_BaseTask)
+@task(base=_BaseTask, routing_key=settings.POLICY_CHANGE_GRADES_ROUTING_KEY)
 def compute_all_grades_for_course(**kwargs):
     """
     Compute grades for all students in the specified course.
     Kicks off a series of compute_grades_for_course_v2 tasks
     to cover all of the students in the course.
     """
-    for course_key, offset, batch_size in _course_task_args(
-        course_key=kwargs.pop('course_key'),
-        kwargs=kwargs
-    ):
-        task_options = {'course_key': course_key, 'offset': offset, 'batch_size': batch_size}
-        compute_grades_for_course_v2.apply_async(kwargs=kwargs, **task_options)
+    for course_key, offset, batch_size in _course_task_args(course_key=kwargs.pop('course_key'), **kwargs):
+        kwargs.update({
+            'course_key': course_key,
+            'offset': offset,
+            'batch_size': batch_size,
+            'routing_key': settings.POLICY_CHANGE_GRADES_ROUTING_KEY,
+        })
+        compute_grades_for_course_v2.apply_async(**kwargs)
 
 
 @task(base=_BaseTask, bind=True, default_retry_delay=30, max_retries=1)
