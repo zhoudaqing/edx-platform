@@ -4,9 +4,10 @@ Platform plugins to support course bookmarks.
 
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from openedx.features.course_experience.course_tools import CourseTool
 
 
-class CourseBookmarksTool(object):
+class CourseBookmarksTool(CourseTool):
     """
     The course bookmarks tool.
     """
@@ -20,20 +21,13 @@ class CourseBookmarksTool(object):
     @classmethod
     def icon_classes(cls):
         """
-        Returns the icon classes to represent this tool.
+        Returns the icon classes needed to represent this tool.
         """
-        return 'icon fa fa-bookmark'
-
-    @classmethod
-    def is_enabled(cls, course_key):
-        """
-        Returns true if this tool is enabled for the specified course key.
-        """
-        return True
+        return 'fa fa-bookmark'
 
     @classmethod
     def url(cls, course_key):
         """
-        Returns the title of this tool.
+        Returns the URL for this tool for the specified course key.
         """
         return reverse('openedx.course_bookmarks.home', args=[course_key])

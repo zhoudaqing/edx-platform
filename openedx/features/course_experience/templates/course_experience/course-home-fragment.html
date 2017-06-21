@@ -67,21 +67,26 @@ from openedx.features.course_experience.course_tools import CourseToolsPluginMan
                 ${HTML(outline_fragment.body_html())}
             </main>
             <aside class="course-sidebar layout-col layout-col-a">
-                <div class="section section-tools">
-                    <h3 class="hd-6">${_("Course Tools")}</h3>
-                    <ul class="list-unstyled">
-                        % for course_tool in CourseToolsPluginManager.get_course_tools():
-                            % if course_tool.is_enabled(course_key):
-                                <li>
-                                    <a href="${course_tool.url(course_key)}">
-                                        <span class="${course_tool.icon_classes()}" aria-hidden="true"></span>
-                                        ${course_tool.title()}
-                                    </a>
-                                </li>
-                            % endif
-                        % endfor
-                    </ul>
-                </div>
+                <%
+                course_tools = CourseToolsPluginManager.get_course_tools()
+                %>
+                % if course_tools:
+                    <div class="section section-tools">
+                        <h3 class="hd-6">${_("Course Tools")}</h3>
+                        <ul class="list-unstyled">
+                            % for course_tool in course_tools:
+                                % if course_tool.is_enabled(course_key):
+                                    <li>
+                                        <a href="${course_tool.url(course_key)}">
+                                            <span class="icon ${course_tool.icon_classes()}" aria-hidden="true"></span>
+                                            ${course_tool.title()}
+                                        </a>
+                                    </li>
+                                % endif
+                            % endfor
+                        </ul>
+                    </div>
+                % endif
                 <div class="section section-dates">
                     ${HTML(dates_fragment.body_html())}
                 </div>

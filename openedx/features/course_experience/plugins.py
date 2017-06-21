@@ -1,14 +1,17 @@
 """
 Platform plugins to support the course experience.
+
+This includes any locally defined CourseTools.
 """
 
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from . import UNIFIED_COURSE_TAB_FLAG
+from course_tools import CourseTool
 
 
-class CourseUpdatesTool(object):
+class CourseUpdatesTool(CourseTool):
     """
     The course updates tool.
     """
@@ -22,9 +25,9 @@ class CourseUpdatesTool(object):
     @classmethod
     def icon_classes(cls):
         """
-        Returns the icon classes to represent this tool.
+        Returns icon classes needed to represent this tool.
         """
-        return 'icon fa fa-newspaper-o'
+        return 'fa fa-newspaper-o'
 
     @classmethod
     def is_enabled(cls, course_key):
