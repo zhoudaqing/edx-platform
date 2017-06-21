@@ -129,12 +129,12 @@ var wpconfig = {
 
     externals: {
         backbone: 'Backbone',
+        coursetalk: 'CourseTalk',
         gettext: 'gettext',
         jquery: 'jQuery',
         logger: 'Logger',
         underscore: '_',
-        URI: 'URI',
-        coursetalk: 'CourseTalk'
+        URI: 'URI'
     },
 
     watchOptions: {
