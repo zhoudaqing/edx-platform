@@ -14,9 +14,9 @@
  *  - edit_display_name - true if the shown xblock's display name should be in inline edit mode
  */
 define(['jquery', 'underscore', 'gettext', 'js/views/baseview', 'common/js/components/utils/view_utils',
-        'js/views/utils/xblock_utils', 'js/views/xblock_string_field_editor',
+        'js/views/utils/xblock_utils', 'js/views/xblock_string_field_editor', 'js/views/container_unit_access_editor',
         'edx-ui-toolkit/js/utils/string-utils', 'edx-ui-toolkit/js/utils/html-utils'],
-    function($, _, gettext, BaseView, ViewUtils, XBlockViewUtils, XBlockStringFieldEditor, StringUtils, HtmlUtils) {
+    function($, _, gettext, BaseView, ViewUtils, XBlockViewUtils, XBlockStringFieldEditor, StringUtils, HtmlUtils, ContainerUnitAccessEditor) {
         'use strict';
         var XBlockOutlineView = BaseView.extend({
             // takes XBlockInfo as a model

@@ -1,0 +1,6 @@
+<div class="incontext-editor-action-wrapper">
+    <a href="" class="action-edit action-inline xblock-container-access-edit" title="<%- gettext('Edit the access') %>">
+        <span class="icon fa fa-gear" aria-hidden="true"></span><span class="sr"> <%- gettext("Edit Access") %></span>
+    </a>
+</div>
+
