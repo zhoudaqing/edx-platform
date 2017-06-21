@@ -4,10 +4,15 @@
 
 <%namespace name='static' file='../static_content.html'/>
 
+<%!
+from openedx.features.course_experience import SHOW_REVIEWS_TOOL
+%>
 
-<div class="coursetalk-read-reviews">
-    ## Coursetalk Widget
-    <div id="ct-custom-read-review-widget" data-provider="${platform_key}" data-course="${course_id}"></div>
-</div>
+% if SHOW_REVIEWS_TOOL.is_enabled(course.id):
+    <div class="coursetalk-read-reviews">
+        ## Coursetalk Widget
+        <div id="ct-custom-read-review-widget" data-provider="${platform_key}" data-course="${course.id}"></div>
+    </div>
 
-<script src="//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-read-reviews.js"></script>
+    <script src="//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-read-reviews.js"></script>
+% endif

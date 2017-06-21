@@ -15,7 +15,6 @@ from lms.djangoapps.courseware.views.views import CourseTabView
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from openedx.features.course_experience import default_course_url_name
 from openedx.features.coursetalk import models
-from openedx.features.coursetalk.helpers import get_coursetalk_course_key
 
 
 class CourseReviewsView(CourseTabView):
@@ -59,17 +58,10 @@ class CourseReviewsFragmentView(EdxFragmentView):
         course_url_name = default_course_url_name(request)
         course_url = reverse(course_url_name, kwargs={'course_id': unicode(course.id)})
 
-        # Grab the fragment type from the configuration file
-        course_reviews_fragment_provider_template = \
-            settings.FEATURES.get('COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME')
-
-        # Create the fragment from the given template
-        course_reviews_provider_fragment = None
-        if course_reviews_fragment_provider_template is not None:
-            course_reviews_provider_fragment = CourseReviewsModuleFragmentView().render_to_fragment(
+        # Create the fragment
+        course_reviews_provider_fragment = CourseReviewsModuleFragmentView().render_to_fragment(
                 request,
-                course_id=course_id,
-                provider_template=course_reviews_fragment_provider_template,
+                course=course,
                 **kwargs
             )
 
@@ -86,18 +78,28 @@ class CourseReviewsFragmentView(EdxFragmentView):
 class CourseReviewsModuleFragmentView(EdxFragmentView):
     """
     A fragment to display the course reviews module as specified by 
-    the provided template (required).
+    the configured template.
     """
 
-    def render_to_fragment(self, request, provider_template, course_id=None, **kwargs):
+    def render_to_fragment(self, request, course=None, **kwargs):
         """
-        Renders the provided template as a module.
+        Renders the configured template as a module.
         """
+        # Grab the fragment type from the configuration file
+        course_reviews_fragment_provider_template = \
+            settings.FEATURES.get('COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME')
+
+        if course_reviews_fragment_provider_template is None:
+            return None
+
+        # Create the fragment from the given template
+        provider_reviews_template = 'course_experience/course_reviews_modules/%s' \
+                                    % course_reviews_fragment_provider_template
+
         context = {
-            'course_id': course_id,
+            'course': course,
             'platform_key': models.CourseTalkWidgetConfiguration.get_platform_key()
         }
 
-        provider_reviews_template = 'course_experience/course_reviews_modules/%s' % provider_template
         html = render_to_string(provider_reviews_template, context)
         return Fragment(html)

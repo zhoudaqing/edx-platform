@@ -29,7 +29,5 @@ from openedx.features.course_experience import course_home_page_title, SHOW_REVI
             </nav>
         </div>
     </header>
-    % if SHOW_REVIEWS_TOOL.is_enabled(course.id):
-        ${HTML(course_reviews_provider_fragment.body_html())}
-    % endif
+    ${HTML(course_reviews_provider_fragment.body_html())}
 </div>

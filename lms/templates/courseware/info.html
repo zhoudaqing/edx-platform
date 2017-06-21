@@ -48,13 +48,6 @@ from openedx.core.djangolib.markup import HTML, Text
         CourseHomeEvents();
 </%static:require_module_async>
 
-<%block name="js_extra">
-  ## CourseTalk widget js script
-  % if show_coursetalk_widget:
-      <script src="//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-write-reviews.js"></script>
-  % endif
-</%block>
-
 <%block name="bodyclass">view-in-course view-course-info ${course.css_class or ''}</%block>
 
 <main id="main" aria-label="Content" tabindex="-1">
@@ -89,14 +82,7 @@ from openedx.core.djangolib.markup import HTML, Text
           <h3 class="hd hd-3">${_("Course Updates and News")}</h3>
           ${HTML(get_course_info_section(request, masquerade_user, course, 'updates'))}
 
-          ## CourseTalk widget
-          % if show_coursetalk_widget:
-            <div class="coursetalk-write-reviews">
-              <div id="ct-custom-read-review-widget" data-provider="${platform_key}" data-course="${course_review_key}"></div>
-            </div>
-          % endif
         </section>
-
         <section aria-label="${_('Handout Navigation')}" class="handouts">
           <h3 class="hd hd-3 handouts-header">${_("Course Tools")}</h3>
             <div>
