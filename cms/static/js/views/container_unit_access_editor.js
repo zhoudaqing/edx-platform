@@ -1,13 +1,9 @@
 /**
- * XBlockStringFieldEditor is a view that allows the user to inline edit an XBlock string field.
- * Clicking on the field value will hide the text and replace it with an input to allow the user
- * to change the value. Once the user leaves the field, a request will be sent to update the
- * XBlock field's value if it has been changed. If the user presses Escape, then any changes will
- * be removed and the input hidden again.
+ * ContainerUnitAccessEditor is a view that allows the user to restrict access to a unit on the studio container page.
  */
 define(['js/views/baseview', 'js/views/utils/xblock_utils', 'js/views/modals/course_outline_modals'],
     function(BaseView, XBlockViewUtils, CourseOutlineModalsFactory) {
-        var XBlockUnitAccessEditor = BaseView.extend({
+        var ContainerUnitAccessEditor = BaseView.extend({
             events: {
                 'click .xblock-access-edit': 'loadAccessEditor'
             },
@@ -16,7 +12,7 @@ define(['js/views/baseview', 'js/views/utils/xblock_utils', 'js/views/modals/cou
 
             initialize: function() {
                 BaseView.prototype.initialize.call(this);
-                this.template = this.loadTemplate('xblock-unit-access-editor');
+                this.template = this.loadTemplate('container-unit-access-editor');
             },
 
             render: function() {
@@ -39,5 +35,5 @@ define(['js/views/baseview', 'js/views/utils/xblock_utils', 'js/views/modals/cou
             }
         });
 
-        return XBlockUnitAccessEditor;
+        return ContainerUnitAccessEditor;
     }); // end define();
