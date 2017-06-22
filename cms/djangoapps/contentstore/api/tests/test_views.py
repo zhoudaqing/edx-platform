@@ -67,12 +67,6 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
 
         cls.namespaced_url = 'courses_api:course_import'
 
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(cls.content_dir)
-        cls.student.delete()
-        cls.staff.delete()
-
     def setUp(self):
         super(CourseImportViewTest, self).setUp()
 
