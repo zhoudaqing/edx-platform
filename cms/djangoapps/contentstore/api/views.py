@@ -42,6 +42,7 @@ class CourseImportExportViewMixin(DeveloperErrorViewMixin):
         if request.user.is_anonymous():
             raise AuthenticationFailed
 
+
 class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
     """
     **Use Case**
@@ -91,11 +92,11 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
 
         courselike_key = CourseKey.from_string(course_id)
         if not has_course_author_access(request.user, courselike_key):
-             return self.make_error_response(
-                 status_code=status.HTTP_403_FORBIDDEN,
-                 developer_message='The user requested does not have the required permissions.',
-                 error_code='user_mismatch'
-             )
+            return self.make_error_response(
+                status_code=status.HTTP_403_FORBIDDEN,
+                developer_message='The user requested does not have the required permissions.',
+                error_code='user_mismatch'
+            )
         try:
             filename = request.FILES['course_data'].name
             if not filename.endswith('.tar.gz'):
@@ -178,11 +179,11 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
 
         courselike_key = CourseKey.from_string(course_id)
         if not has_course_author_access(request.user, courselike_key):
-             return self.make_error_response(
-                 status_code=status.HTTP_403_FORBIDDEN,
-                 developer_message='The user requested does not have the required permissions.',
-                 error_code='user_mismatch'
-             )
+            return self.make_error_response(
+                status_code=status.HTTP_403_FORBIDDEN,
+                developer_message='The user requested does not have the required permissions.',
+                error_code='user_mismatch'
+            )
         try:
             task_id = request.GET['task_id']
             task_status = UserTaskStatus.objects.get(task_id=task_id)
