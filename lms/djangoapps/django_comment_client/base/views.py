@@ -165,11 +165,11 @@ def track_thread_viewed_event(request, course, thread):
     Send analytics event for a viewed thread.
     """
     event_name = _EVENT_NAME_TEMPLATE.format(obj_type='thread', action_name='viewed')
-    event_data = {
-        'commentable_id': thread.commentable_id,
-        'team_id': None, # @@TODO What should go here?
-        'target_username': thread.username,
-    }
+    event_data = {}
+    event_data['commentable_id'] = thread.commentable_id
+    if hasattr(thread, 'username'):
+        event_data['target_username'] = thread.username
+    # @@TODO team_id
     add_truncated_title_to_event_data(event_data, thread.title)
     track_forum_event(request, event_name, course, thread, event_data)
 
