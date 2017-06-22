@@ -32,6 +32,8 @@ for (var schemeId in groupAccessMap) {
     })
 }
 %>
-<% if (hasPartitionGroupComponents) { %>
+<% if (numAllowedGroups > 0) { %>
+    <small class="access-message"><%- gettext('Access to this unit is restricted to ') %></small>
+<% } else if (hasPartitionGroupComponents) { %>
     <small class="access-message"><%- gettext('Access to some content in this unit is restricted to certain groups of learners') %></small>
 <% } %>
