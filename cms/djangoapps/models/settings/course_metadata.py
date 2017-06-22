@@ -5,6 +5,8 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from xblock.fields import Scope
 
+from openedx.core.djangoapps.waffle_utils import WaffleSwitchNamespace
+
 from xblock_django.models import XBlockStudioConfigurationFlag
 from xmodule.modulestore.django import modulestore
 
@@ -100,6 +102,13 @@ class CourseMetadata(object):
         # display the "Allow Unsupported XBlocks" setting.
         if not XBlockStudioConfigurationFlag.is_enabled():
             filtered_list.append('allow_unsupported_xblocks')
+
+        # TODO: Alex Dusenbery 2017-06-22
+        # Before we roll out the auto-certs feature, move this to a good, shared
+        # place such that we're not repeating code found in LMS.
+        certificate_switches = WaffleSwitchNamespace(name=u'certificates', log_prefix=u'Certificates: ')
+        if not certificate_switches.is_enabled(u'self_paced_only'):
+            filtered_list.append('certificate_available_date')
 
         return filtered_list
 
