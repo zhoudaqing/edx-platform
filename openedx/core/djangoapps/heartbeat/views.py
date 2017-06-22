@@ -23,7 +23,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
     """
     check_results = {}
     try:
-        check_results = runchecks(request)
+        check_results = runchecks('extended' in request.GET)
 
         status_code = 200  # Default to OK
         for check in check_results:

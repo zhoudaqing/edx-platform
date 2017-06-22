@@ -8,7 +8,7 @@ from .defaults import HEARTBEAT_DEFAULT_CHECKS,\
     HEARTBEAT_CELERY_TIMEOUT
 
 
-def runchecks(request):
+def runchecks(include_extended=False):
     """
     Iterates through a tuple of systems checks,
     then returns a key name for the check and the value
@@ -19,7 +19,7 @@ def runchecks(request):
     #Taken straight from Django
     #If there is a better way, I don't know it
     list_of_checks = getattr(settings, 'HEARTBEAT_CHECKS', HEARTBEAT_DEFAULT_CHECKS)
-    if('extended' in request.GET):
+    if(include_extended):
         list_of_checks += getattr(settings, 'HEARTBEAT_EXTENDED_CHECKS', HEARTBEAT_EXTENDED_DEFAULT_CHECKS)
 
     for path in list_of_checks:
@@ -32,7 +32,7 @@ def runchecks(request):
                     mod = import_module(module)
                 func = getattr(mod, attr)
 
-                check_name, is_ok, message = func(request)
+                check_name, is_ok, message = func()
                 response_dict[check_name] = {
                     'status': is_ok,
                     'message': message

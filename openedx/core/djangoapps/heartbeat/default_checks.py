@@ -13,7 +13,7 @@ from .tasks import sample_task
 
 #Modulestore
 
-def check_modulestore(request):
+def check_modulestore():
     # This refactoring merely delegates to the default modulestore (which if it's mixed modulestore will
     # delegate to all configured modulestores) and a quick test of sql. A later refactoring may allow
     # any service to register itself as participating in the heartbeat. It's important that all implementation
@@ -26,7 +26,7 @@ def check_modulestore(request):
         return 'modulestore', False, unicode(fail)
 
 
-def check_database(request):
+def check_database():
     cursor = connection.cursor()
     try:
         cursor.execute("SELECT CURRENT_DATE")
@@ -41,7 +41,7 @@ CACHE_KEY = 'heartbeat-test'
 CACHE_VALUE = 'abc123'
 
 
-def check_cache_set(request):
+def check_cache_set():
     try:
         cache.set(CACHE_KEY, CACHE_VALUE, 30)
         return 'cache_set', True, "OK"
@@ -49,7 +49,7 @@ def check_cache_set(request):
         return 'cache_set', False, unicode(fail)
 
 
-def check_cache_get(request):
+def check_cache_get():
     try:
         data = cache.get(CACHE_KEY)
         if data == CACHE_VALUE:
@@ -60,19 +60,8 @@ def check_cache_get(request):
         return 'cache_get', False, unicode(fail)
 
 
-#User
-def check_user_exists(request):
-    from django.contrib.auth.models import User
-    try:
-        username = request.GET.get('username')
-        User.objects.get(username=username)
-        return 'user_exists', True, "OK"
-    except fail:
-        return 'user_exists', False, unicode(fail)
-
-
 #Celery
-def check_celery(request):
+def check_celery():
     now = time()
     datetimenow = datetime.now()
     expires = datetimenow + timedelta(seconds=getattr(settings, 'HEARTBEAT_CELERY_TIMEOUT', HEARTBEAT_CELERY_TIMEOUT))
