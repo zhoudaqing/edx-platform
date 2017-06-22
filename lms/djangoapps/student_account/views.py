@@ -223,6 +223,8 @@ def update_context_for_enterprise(request, context):
     else:
         context['enable_enterprise_sidebar'] = False
 
+    context['data']['hide_auth_warnings'] = True
+
     return context
 
 

@@ -52,7 +52,7 @@ edx-lint==0.4.3
 astroid==1.3.8
 edx-django-oauth2-provider==1.1.4
 edx-django-sites-extensions==2.1.1
-edx-enterprise==0.36.3
+git+https://github.com/edx/edx-enterprise.git@bd0fa6328c77a1caa483e260017b197f0234c9d8#egg=edx-enterprise==0.36.4
 edx-oauth2-provider==1.2.0
 edx-opaque-keys==0.4.0
 edx-organizations==0.4.4
