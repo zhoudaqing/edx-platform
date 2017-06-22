@@ -177,7 +177,7 @@ def permitted(func):
                 content = None
 
             if 'username' in content:
-                (user_group_id, content_user_group_id) = get_user_group_ids(request.user, course_key, content)
+                (user_group_id, content_user_group_id) = get_user_group_ids(course_key, content, request.user)
             return content, user_group_id, content_user_group_id
 
         course_key = CourseKey.from_string(kwargs['course_id'])
