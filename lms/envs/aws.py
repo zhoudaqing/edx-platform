@@ -953,6 +953,10 @@ ENTERPRISE_COURSE_ENROLLMENT_AUDIT_MODES = ENV_TOKENS.get(
     ENTERPRISE_COURSE_ENROLLMENT_AUDIT_MODES
 )
 
+BASE_COOKIE_DOMAIN = ENV_TOKENS.get(
+    'BASE_COOKIE_DOMAIN',
+    BASE_COOKIE_DOMAIN
+)
 
 ############## ENTERPRISE SERVICE API CLIENT CONFIGURATION ######################
 # The LMS communicates with the Enterprise service via the EdxRestApiClient class
