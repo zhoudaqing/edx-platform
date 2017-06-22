@@ -85,8 +85,8 @@
 // green primary button
 %btn-primary-green {
   @extend %ui-btn-primary;
-  background: $uxpl-green-base;
-  border-color: $uxpl-green-base;
+  background: $uxpl-green-dark-base;
+  border-color: $uxpl-green-dark-base;
   color: $white;
 
   &:hover, &:active {

@@ -122,11 +122,11 @@
             text-transform: uppercase;
             &:hover {
               background-color: $white;
-              color: $blue-d2;
+              color: $uxpl-blue-base;
             }
             &.active {
-              border-bottom: 4px solid $blue-d2;
-              color: $offBlack;
+              border-bottom: 4px solid $uxpl-blue-base;
+              color: $uxpl-blue-base;
             }
           }
         }
