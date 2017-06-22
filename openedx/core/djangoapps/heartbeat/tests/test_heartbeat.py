@@ -23,7 +23,9 @@ class HeartbeatTestCase(ModuleStoreTestCase):
         return super(HeartbeatTestCase, self).setUp()
 
     def test_success(self):
-        response = self.client.get(self.heartbeat_url)
+        response = self.client.get(self.heartbeat_url + '?extended')
+        print response
+
         self.assertEqual(response.status_code, 200)
 
     def test_sql_fail(self):

@@ -1,13 +1,6 @@
 """
 Views for verifying the health (heartbeat) of the app.
 """
-from django.db import connection
-from django.db.utils import DatabaseError
-from dogapi import dog_stats_api
-
-from util.json_request import JsonResponse
-from xmodule.exceptions import HeartbeatFailure
-from xmodule.modulestore.django import modulestore
 from dogapi import dog_stats_api
 from util.json_request import JsonResponse
 

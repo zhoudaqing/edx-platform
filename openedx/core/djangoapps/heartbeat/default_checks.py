@@ -1,17 +1,20 @@
 from datetime import datetime, timedelta
+from time import sleep, time
+
+from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
 from django.db.utils import DatabaseError
-from time import sleep, time
 from xmodule.modulestore.django import modulestore
 from xmodule.exceptions import HeartbeatFailure
 
+from .defaults import HEARTBEAT_CELERY_TIMEOUT
 from .tasks import sample_task
 
 
-#DEFAULT SYSTEM CHECKS
+# DEFAULT SYSTEM CHECKS
 
-#Modulestore
+# Modulestore
 
 def check_modulestore():
     # This refactoring merely delegates to the default modulestore (which if it's mixed modulestore will
@@ -21,7 +24,7 @@ def check_modulestore():
     try:
         #@TODO Do we want to parse the output for split and mongo detail and return it?
         modulestore().heartbeat()
-        return 'modulestore', True, u"OK"
+        return 'modulestore', True, u'OK'
     except HeartbeatFailure as fail:
         return 'modulestore', False, unicode(fail)
 
@@ -31,12 +34,12 @@ def check_database():
     try:
         cursor.execute("SELECT CURRENT_DATE")
         cursor.fetchone()
-        return 'sql', True, u"OK"
+        return 'sql', True, u'OK'
     except DatabaseError as fail:
         return 'sql', False, unicode(fail)
 
 
-#Caching
+# Caching
 CACHE_KEY = 'heartbeat-test'
 CACHE_VALUE = 'abc123'
 
@@ -44,7 +47,7 @@ CACHE_VALUE = 'abc123'
 def check_cache_set():
     try:
         cache.set(CACHE_KEY, CACHE_VALUE, 30)
-        return 'cache_set', True, "OK"
+        return 'cache_set', True, u'OK'
     except Exception as fail:
         return 'cache_set', False, unicode(fail)
 
@@ -53,14 +56,14 @@ def check_cache_get():
     try:
         data = cache.get(CACHE_KEY)
         if data == CACHE_VALUE:
-            return 'cache_get', True, "OK"
+            return 'cache_get', True, u'OK'
         else:
-            return 'cache_get', False, "value check failed"
+            return 'cache_get', False, u'value check failed'
     except Exception as fail:
         return 'cache_get', False, unicode(fail)
 
 
-#Celery
+# Celery
 def check_celery():
     now = time()
     datetimenow = datetime.now()
