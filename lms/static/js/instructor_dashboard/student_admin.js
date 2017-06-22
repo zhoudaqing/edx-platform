@@ -412,6 +412,9 @@
             this.$btn_rescore_problem_if_higher_all.click(function() {
                 return studentadmin.rescore_problem_all(true);
             });
+            this.$btn_override_problem_score_single.click(function() {
+                return studentadmin.override_problem_score_single();
+            });
             this.$btn_task_history_all.click(function() {
                 var sendData;
                 sendData = {
