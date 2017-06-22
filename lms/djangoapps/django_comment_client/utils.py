@@ -563,6 +563,10 @@ def get_ability(course_id, content, user):
 
 
 def get_user_group_ids(user, course_id, content):
+    """
+    Given a user, course ID, and the content of the thread or comment, returns the group ID for the current user
+    and the user that posted the thread/comment.
+    """
     content_user = get_user_by_username_or_email(content.get('username'))
     user_group_id = get_group_id_for_user(user, get_course_discussion_settings(course_id))
     content_user_group_id = get_group_id_for_user(content_user, get_course_discussion_settings(course_id))
