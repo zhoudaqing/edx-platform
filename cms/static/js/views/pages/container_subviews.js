@@ -32,6 +32,32 @@ define(['jquery', 'underscore', 'gettext', 'js/views/baseview', 'common/js/compo
             render: function() {}
         });
 
+        var UnitAccess = ContainerStateListenerView.extend({
+            initialize: function () {
+                ContainerStateListenerView.prototype.initialize.call(this);
+                this.template = this.loadTemplate('container-unit-access');
+            },
+
+            shouldRefresh: function(model) {
+                return ViewUtils.hasChangedAttributes(model, ['has_partition_group_components', 'group_access']);
+            },
+
+            render: function() {
+                HtmlUtils.setHtml(
+                    this.$el,
+                    HtmlUtils.HTML(
+                        this.template({
+                            hasPartitionGroupComponents: this.model.get('has_partition_group_components'),
+                            groupAccess: this.model.get('group_access'),
+                            userPartitions: this.model.get('user_partitions')
+                        })
+                    )
+                );
+                return this;
+            }
+
+        })
+
         var MessageView = ContainerStateListenerView.extend({
             initialize: function() {
                 ContainerStateListenerView.prototype.initialize.call(this);
@@ -273,6 +299,7 @@ define(['jquery', 'underscore', 'gettext', 'js/views/baseview', 'common/js/compo
             'MessageView': MessageView,
             'ViewLiveButtonController': ViewLiveButtonController,
             'Publisher': Publisher,
-            'PublishHistory': PublishHistory
+            'PublishHistory': PublishHistory,
+            'UnitAccess': UnitAccess
         };
     }); // end define();

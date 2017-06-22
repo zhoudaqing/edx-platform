@@ -1,0 +1,37 @@
+<%
+var groupAccessMap = {};
+var idToName = {};
+
+for (schemeId in groupAccess) {
+    var groupIds = [];
+    groupAccess[schemeId].forEach(function (groupId) {
+        groupIds.push(groupId);
+    });
+    groupAccessMap[schemeId] = groupIds;
+}
+
+userPartitions.forEach(function (partition) {
+    var schemeId = partition['id'];
+    var groups = partition['groups'];
+    var groupIds = [];
+    idToName[schemeId] = {};
+    groups.forEach(function (group) {
+        var groupIdToName = {};
+        var groupId = group['id'];
+        var groupName = group['name'];
+        groupIdToName[groupId] = groupName;
+        idToName[schemeId][groupId] = groupName;
+    })
+});
+
+var numAllowedGroups = 0;
+for (var schemeId in groupAccessMap) {
+    var groups = groupAccessMap[schemeId];
+    groups.forEach(function (groups) {
+        numAllowedGroups++;
+    })
+}
+%>
+<% if (hasPartitionGroupComponents) { %>
+    <small class="access-message"><%- gettext('Access to some content in this unit is restricted to certain groups of learners') %></small>
+<% } %>

@@ -11,6 +11,7 @@ else:
 <%!
 from django.utils.translation import ugettext as _
 
+from contentstore.utils import get_visibility_partition_info
 from contentstore.views.helpers import xblock_studio_url, xblock_type_display_name
 from openedx.core.djangolib.js_utils import (
     dump_js_escaped_json, js_escaped_string
@@ -49,6 +50,30 @@ from openedx.core.djangolib.markup import HTML, Text
         );
     });
 </%block>
+<!--
+<%def name="get_unit_access_text()">
+<%
+if not is_unit_page:
+    return ""
+
+partition_info = get_visibility_partition_info(xblock)
+selected_groups_label = partition_info["selected_groups_label"]
+group_access = xblock_info["group_access"]
+
+num_allowed_groups = 0
+for (scheme_id, groups) in group_access.items():
+    num_allowed_groups += len(groups)
+
+unit_access_text = ""
+if num_allowed_groups > 0:
+    unit_access_text = "Access to this unit is restricted to {}".format(selected_groups_label)
+elif xblock_info["has_partition_group_components"]:
+    unit_access_text = "Access to some content in this unit is restricted to certain groups of learners"
+
+return unit_access_text
+%>
+</%def>
+-->
 
 <%block name="content">
 
@@ -71,6 +96,8 @@ from openedx.core.djangolib.markup import HTML, Text
             <div class="wrapper-xblock-field incontext-editor is-editable"
                  data-field="display_name" data-field-display-name="${_("Display Name")}">
                 <h1 class="page-header-title xblock-field-value incontext-editor-value"><span class="title-value">${xblock.display_name_with_default}</span></h1>
+            </div>
+            <div class="container-unit-access">
             </div>
         </div>
 
