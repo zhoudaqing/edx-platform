@@ -6,7 +6,6 @@ import logging
 import urllib
 from collections import OrderedDict, namedtuple
 from datetime import datetime, timedelta
-from pytz import utc
 
 import analytics
 from django.conf import settings
@@ -30,6 +29,7 @@ from ipware.ip import get_ip
 from markupsafe import escape
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, UsageKey
+from pytz import utc
 from rest_framework import status
 from web_fragments.fragment import Fragment
 
@@ -86,7 +86,6 @@ from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.features.course_experience import UNIFIED_COURSE_TAB_FLAG, course_home_url_name
 from openedx.features.course_experience.views.course_dates import CourseDatesFragmentView
-
 from openedx.features.enterprise_support.api import data_sharing_consent_required
 from shoppingcart.utils import is_shopping_cart_enabled
 from student.models import CourseEnrollment, UserTestGroup
