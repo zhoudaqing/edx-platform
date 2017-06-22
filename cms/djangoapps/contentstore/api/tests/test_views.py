@@ -24,7 +24,7 @@ from xmodule.modulestore.tests.factories import CourseFactory
 @ddt.ddt
 class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
     """
-    Test the CourseImportView class for providing a RESTful API to import courses
+    Test importing courses via a RESTful API (POST method only)
     """
     MODULESTORE = TEST_DATA_SPLIT_MODULESTORE
 
@@ -40,10 +40,7 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
 
         cls.password = 'test'
         cls.student = UserFactory(username='dummy', password=cls.password)
-        cls.other_student = UserFactory(username='foo', password=cls.password)
-        cls.other_user = UserFactory(username='bar', password=cls.password)
         cls.staff = StaffFactory(course_key=cls.course.id, password=cls.password)
-        cls.global_staff = GlobalStaffFactory.create()
 
         cls.content_dir = path(tempfile.mkdtemp())
 
@@ -73,6 +70,8 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(cls.content_dir)
+        cls.student.delete()
+        cls.staff.delete()
 
     def setUp(self):
         super(CourseImportViewTest, self).setUp()
@@ -92,22 +91,24 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
         query_string = ''
         return base_url + query_string
 
-    def test_anonymous(self):
+    def test_anonymous_import_fails(self):
         """
         Test that an anonymous user cannot access the API and an error is received.
         """
-        resp = self.client.post(self.get_url())
+        with open(self.good_tar, 'rb') as fp:
+            resp = self.client.post(self.get_url(), {'course_data': fp}, format='multipart')
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_student(self):
+    def test_student_import_fails(self):
         """
         Test that an student user cannot access the API and an error is received.
         """
         self.client.login(username=self.student.username, password=self.password)
-        resp = self.client.post(self.get_url())
+        with open(self.good_tar, 'rb') as fp:
+            resp = self.client.post(self.get_url(), {'course_data': fp}, format='multipart')
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_staff_has_access(self):
+    def test_staff_with_access_import_succeeds(self):
         """
         Test that an staff user can access the API and successfully upload a course
         """
@@ -116,10 +117,32 @@ class CourseImportViewTest(SharedModuleStoreTestCase, APITestCase):
             resp = self.client.post(self.get_url(), {'course_data': fp}, format='multipart')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-    def test_staff_has_no_access(self):
+    def test_staff_has_no_access_import_fails(self):
         """
         Test that an staff user can't access another course via the API
         """
         self.client.login(username=self.staff.username, password=self.password)
-        resp = self.client.post(self.get_url(self.restricted_course_key))
+        with open(self.good_tar, 'rb') as fp:
+            resp = self.client.post(self.get_url(self.restricted_course_key), {'course_data': fp}, format='multipart')
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_student_get_status_fails(self):
+        """
+        Test that an student user cannot access the API and an error is received.
+        """
+        self.client.login(username=self.student.username, password=self.password)
+        resp = self.client.get(self.get_url(), {'task_id': '1234'})
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_staff_get_status_succeeds(self):
+        """
+        Test that an import followed by a get status results in success
+
+        Note: This relies on the fact that we process imports synchronously during testing
+        """
+        self.client.login(username=self.staff.username, password=self.password)
+        with open(self.good_tar, 'rb') as fp:
+            resp = self.client.post(self.get_url(), {'course_data': fp}, format='multipart')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        resp = self.client.get(self.get_url(), {'task_id': resp.data['task_id']}, format='multipart')
+        self.assertEqual(resp.data['state'], "Succeeded")  # @TODO Make this reference a constant

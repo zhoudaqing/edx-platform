@@ -121,9 +121,9 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
 
             async_result = import_olx.delay(
                 request.user.id, text_type(courselike_key), storage_path, filename, request.LANGUAGE_CODE)
-            return Response([{
+            return Response({
                 'task_id': async_result.task_id
-            }])
+            })
         except Exception as e:
             return self.make_error_response(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -186,9 +186,9 @@ class CourseImportView(CourseImportExportViewMixin, GenericAPIView):
         try:
             task_id = request.GET['task_id']
             task_status = UserTaskStatus.objects.get(task_id=task_id)
-            return Response([{
+            return Response({
                 'state': task_status.state
-            }])
+            })
 
             #log.debug('importing course to {0}'.format())
 
