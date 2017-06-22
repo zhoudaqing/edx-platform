@@ -8,9 +8,9 @@ from certificates import api as certs_api
 from certificates.models import CertificateGenerationConfiguration, CertificateWhitelist
 from certificates.signals import _listen_for_course_pacing_changed
 from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
+from student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
-from student.tests.factories import UserFactory
 
 
 class SelfGeneratedCertsSignalTest(ModuleStoreTestCase):
@@ -47,22 +47,20 @@ class SelfGeneratedCertsSignalTest(ModuleStoreTestCase):
 
 class WhitelistGeneratedCertificatesTest(ModuleStoreTestCase):
     """
-    Tests for enabling/disabling self-generated certificates according to course-pacing.
+    Tests for whitelisted student auto-certificate generation
     """
     def setUp(self):
         super(WhitelistGeneratedCertificatesTest, self).setUp()
         self.course = CourseFactory.create(self_paced=True)
         self.user = UserFactory.create()
-        SelfPacedConfiguration(enabled=True).save()
 
     def test_cert_generation_on_whitelist_append(self):
         """
-        Verify that signal enables or disables self-generated certificates
-        according to course-pacing.
+        Verify that signal is sent, received, and fires task
         """
         with mock.patch(
-                'lms.djangoapps.certificates.signals.generate_certificate.apply_async',
-                return_value=None
+            'lms.djangoapps.certificates.signals.generate_certificate.apply_async',
+            return_value=None
         ) as mock_generate_certificate_apply_async:
             CertificateWhitelist.objects.create(
                 user=self.user,

@@ -24,8 +24,7 @@ def _listen_for_certificate_whitelist_append(sender, instance, **kwargs):  # pyl
     log.info(u'Certificate generation task initiated for {user} : {course} via whitelist'.format(
         user=instance.user.id,
         course=instance.course_id
-        )
-    )
+    ))
 
 
 @receiver(COURSE_PACING_CHANGE, dispatch_uid="course_pacing_changed")
