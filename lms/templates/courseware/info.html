@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 from courseware.courses import get_course_info_section, get_course_date_blocks
 from openedx.core.djangoapps.self_paced.models import SelfPacedConfiguration
 from openedx.core.djangolib.markup import HTML, Text
-from openedx.features.course_experience import SHOW_REVIEWS_TOOL
+from openedx.features.course_experience import SHOW_REVIEWS_TOOL_FLAG
 %>
 
 <%block name="pagetitle">${_("{course_number} Course Info").format(course_number=course.display_number_with_default)}</%block>
@@ -91,7 +91,7 @@ from openedx.features.course_experience import SHOW_REVIEWS_TOOL
                     <span class="icon fa fa-bookmark" aria-hidden="true"></span>
                     ${_("Bookmarks")}
                 </a>
-                % if SHOW_REVIEWS_TOOL.is_enabled(course.id):
+                % if SHOW_REVIEWS_TOOL_FLAG.is_enabled(course.id):
                     <a href="${reverse('openedx.course_experience.course_reviews', args=[course.id])}">
                         <span class="icon fa fa-star" aria-hidden="true"></span>
                         ${_("Reviews")}

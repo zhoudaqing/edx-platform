@@ -5,10 +5,10 @@
 <%namespace name='static' file='../static_content.html'/>
 
 <%!
-from openedx.features.course_experience import SHOW_REVIEWS_TOOL
+from openedx.features.course_experience import SHOW_REVIEWS_TOOL_FLAG
 %>
 
-% if SHOW_REVIEWS_TOOL.is_enabled(course.id):
+% if SHOW_REVIEWS_TOOL_FLAG.is_enabled(course.id):
     <div class="coursetalk-read-reviews">
         ## Coursetalk Widget
         <div id="ct-custom-read-review-widget" data-provider="${platform_key}" data-course="${course.id}"></div>

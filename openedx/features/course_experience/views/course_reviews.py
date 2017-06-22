@@ -13,8 +13,7 @@ from web_fragments.fragment import Fragment
 from courseware.courses import get_course_with_access
 from lms.djangoapps.courseware.views.views import CourseTabView
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
-from openedx.features.course_experience import default_course_url_name
-from openedx.features.coursetalk import models
+from openedx.features.course_experience import default_course_url_name, models
 
 
 class CourseReviewsView(CourseTabView):
@@ -43,13 +42,8 @@ class CourseReviewsFragmentView(EdxFragmentView):
     def render_to_fragment(self, request, course_id=None, **kwargs):
         """
         Fragment to render the course reviews fragment. The provider
-        of the reviews can be set in the configuration file under the
-        variable COURSE_REVIEWS_PROVIDER_TEMPLATE. This setting points
-        directly to the particular sub-fragment that should be used.
-
-        For example, to use CourseTalk as a provider, one would set:
-        settings.FEATURES.get('COURSE_REVIEWS_PROVIDER_TEMPLATE')
-            = 'coursetalk-reviews-fragment.html'
+        of the reviews can be set in the django admin panel as a 
+        course reviews tool configuration.
 
         """
 
@@ -87,9 +81,9 @@ class CourseReviewsModuleFragmentView(EdxFragmentView):
         """
         # Grab the fragment type from the configuration file
         course_reviews_fragment_provider_template = \
-            settings.FEATURES.get('COURSE_REVIEWS_TOOL_PROVIDER_FRAGMENT_NAME')
+            models.CourseReviewsToolConfiguration.get_reviews_provider_fragment()
 
-        if course_reviews_fragment_provider_template is None:
+        if not course_reviews_fragment_provider_template:
             return None
 
         # Create the fragment from the given template
@@ -98,7 +92,7 @@ class CourseReviewsModuleFragmentView(EdxFragmentView):
 
         context = {
             'course': course,
-            'platform_key': models.CourseTalkWidgetConfiguration.get_platform_key()
+            'platform_key': models.CourseReviewsToolConfiguration.get_platform_key()
         }
 
         html = render_to_string(provider_reviews_template, context)
