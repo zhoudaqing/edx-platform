@@ -38,5 +38,4 @@ class HeartbeatTestCase(ModuleStoreTestCase):
         with patch('openedx.core.djangoapps.heartbeat.default_checks.modulestore') as mock_modulestore:
             mock_modulestore.return_value.heartbeat.side_effect = HeartbeatFailure('msg', 'service')
             response = self.client.get(self.heartbeat_url)
-            print response
             self.assertEqual(response.status_code, 503)

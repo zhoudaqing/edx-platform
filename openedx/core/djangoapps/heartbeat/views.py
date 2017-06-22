@@ -27,7 +27,7 @@ def heartbeat(request):  # pylint: disable=unused-argument
 
         status_code = 200  # Default to OK
         for check in check_results:
-            if(check_results[check]['status'] is False):
+            if not check_results[check]['status']:
                 status_code = 503  # 503 on any failure
     except Exception as e:
         status_code = 503

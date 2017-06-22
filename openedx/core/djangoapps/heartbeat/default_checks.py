@@ -21,7 +21,7 @@ def check_modulestore():
     try:
         #@TODO Do we want to parse the output for split and mongo detail and return it?
         modulestore().heartbeat()
-        return 'modulestore', True, "OK"
+        return 'modulestore', True, u"OK"
     except HeartbeatFailure as fail:
         return 'modulestore', False, unicode(fail)
 
@@ -31,7 +31,7 @@ def check_database():
     try:
         cursor.execute("SELECT CURRENT_DATE")
         cursor.fetchone()
-        return 'sql', True, "OK"
+        return 'sql', True, u"OK"
     except DatabaseError as fail:
         return 'sql', False, unicode(fail)
 
@@ -45,7 +45,7 @@ def check_cache_set():
     try:
         cache.set(CACHE_KEY, CACHE_VALUE, 30)
         return 'cache_set', True, "OK"
-    except fail:
+    except Exception as fail:
         return 'cache_set', False, unicode(fail)
 
 
@@ -56,7 +56,7 @@ def check_cache_get():
             return 'cache_get', True, "OK"
         else:
             return 'cache_get', False, "value check failed"
-    except fail:
+    except Exception as fail:
         return 'cache_get', False, unicode(fail)
 
 
