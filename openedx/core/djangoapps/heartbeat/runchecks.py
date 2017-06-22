@@ -3,9 +3,7 @@ from importlib import import_module
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-from .defaults import (HEARTBEAT_DEFAULT_CHECKS,
-                       HEARTBEAT_EXTENDED_DEFAULT_CHECKS,
-                       HEARTBEAT_CELERY_TIMEOUT)
+from .defaults import HEARTBEAT_DEFAULT_CHECKS, HEARTBEAT_EXTENDED_DEFAULT_CHECKS
 
 
 def runchecks(include_extended=False):
